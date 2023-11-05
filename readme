@@ -1,3 +1,14 @@
+
+#****************PASOS PARA USAR APPP Y JANGO*************
+
+'''
+1- EJECUTAR : .\env\Scripts\activate  esto activa el ambiente virtual
+2- python manage.py startapp clinicaApp 
+3- python manage.py runserver
+4- Django version 4.2.6, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.  en la direccion ip hacer control + click para abrir la pagina en navegador 
+
 #la aplicacion esta siendo editada en clinicaApp
 #la carpeta appclinicaArchivos estan todos los constructores
 #todo se edita en la carpeta clinicaApp
@@ -5,5 +16,4 @@
 #instalar sqlite
 
 
-#el pato el topa si
-#awefawefawefawef
+'''
