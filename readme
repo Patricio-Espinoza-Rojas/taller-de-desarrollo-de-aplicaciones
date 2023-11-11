@@ -23,6 +23,13 @@ https://www.bootstrapcdn.com/
 
 **cambios 11-11-2023, se agregan en el menu nuevo las visatas del crud con sus html y sus referencias, clinica web es el principal
     en el archivo models.py de la carpeta template se edita para la logica de tablas y bd para empezar el crud
+   video guia para el crud:
+   https://www.youtube.com/watch?v=-TIgf6PRdJE&list=PLvzpnb2mWci80mko7ty-BfRtb-YKskHux&index=2&t=1864s
+   
+   documentacion django:   
+    https://docs.djangoproject.com/en/4.1/ref/models/fields/#model-field-types
+    
+    https://docs.djangoproject.com/en/4.1/ref/templates/builtins/
     
 
 '''
