@@ -21,4 +21,8 @@ boostrap
 https://cdnjs.com/libraries/font-awesome
 https://www.bootstrapcdn.com/
 
+**cambios 11-11-2023, se agregan en el menu nuevo las visatas del crud con sus html y sus referencias, clinica web es el principal
+    en el archivo models.py de la carpeta template se edita para la logica de tablas y bd para empezar el crud
+    
+
 '''
