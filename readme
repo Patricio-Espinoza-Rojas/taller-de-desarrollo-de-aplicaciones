@@ -1,5 +1,5 @@
 
-#****************PASOS PARA USAR APPP Y JANGO*************
+#****************PASOS PARA USAR APPP Y JANGO MAS ACTUALIZACIONES*************
 
 '''
 1- EJECUTAR : .\env\Scripts\activate  esto activa el ambiente virtual
@@ -15,5 +15,10 @@ Quit the server with CTRL-BREAK.  en la direccion ip hacer control + click para 
 #ver tabien readme en carpeta clinicaApp
 #instalar sqlite
 
+cambios del 9-11, se agrego carpeta templates y archivo html llamado clinicaweb, se le agrega href para link de
+boostrap
+
+https://cdnjs.com/libraries/font-awesome
+https://www.bootstrapcdn.com/
 
 '''
