@@ -11,5 +11,8 @@ urlpatterns = [
     path('Actualizar Paciente', views.actualizarPaciente, name='actualizarPaciente'),
     path('pacientes/guardar', views.guardar, name='guardar'),
     path('pacientes/eliminar/<int:id>', views.eliminar, name='eliminar'),
+    path('pacientes/detalle/<int:id>', views.detalle, name='detalle'),
+    path('pacientes/editar', views.editar, name='editar'),
+
 
 ]

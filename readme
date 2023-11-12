@@ -48,5 +48,11 @@ https://www.bootstrapcdn.com/
     *eliminar:
     se crea listado de pacientes con boton eliminar
     
+    *actualizar:
+    se crea funcion actualizar
+    
+    ****crear en views, luego en urls, los html de las funciones y views 
+    
+    
 
 '''

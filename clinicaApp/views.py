@@ -26,7 +26,10 @@ def listarPaciente(request):
     })
 
 def actualizarPaciente(request):
-    return render(request, "paci_actualizar.html")
+    pacientes = Paciente.objects.all()
+    return render(request, "paci_actualizar.html",{
+        'pacientes' : pacientes
+    })
 
 def guardar(request):
     rut = request.POST["rut"]
@@ -45,6 +48,26 @@ def eliminar(request, id):
     paciente.delete()
     messages.success(request, 'Paciente eliminado')
     return redirect('eliminarPaciente')
+
+def detalle(request, id):
+    paciente = Paciente.objects.get(pk=id)
+    return render(request, "paciente_editar.html",{
+        'paciente' : paciente
+    })
+
+def editar(request):
+    rut = request.POST["rut"]
+    nombre = request.POST["nombre"]
+    direccion = request.POST["direccion"]
+    telefono = request.POST["telefono"]
+    correo = request.POST["correo"]
+    id = request.POST["id"]
+    Paciente.objects.filter(pk=id).update(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
+                  correo_paciente=correo)
+    messages.success(request, 'Paciente Actualizado')
+    return redirect('actualizarPaciente')
+
+    
     
     
 
