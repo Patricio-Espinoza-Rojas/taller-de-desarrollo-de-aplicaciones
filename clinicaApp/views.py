@@ -14,7 +14,10 @@ def crearPaciente(request):
     return render(request, "paci_nuevo.html")
 
 def eliminarPaciente(request):
-    return render(request, "paci_borrar.html")
+    pacientes = Paciente.objects.all() #pacientes es variable que guarda la consulta de la tabla paciente
+    return render(request, "paci_borrar.html",{
+    'pacientes' : pacientes
+    })
 
 def listarPaciente(request):
     pacientes = Paciente.objects.all() #pacientes es variable que guarda la consulta de la tabla paciente
@@ -36,6 +39,13 @@ def guardar(request):
     pa.save()
     messages.success(request, 'Paciente Guardado')
     return redirect('crearPaciente')
+
+def eliminar(request, id):
+    paciente = Paciente.objects.filter(pk=id)
+    paciente.delete()
+    messages.success(request, 'Paciente eliminado')
+    return redirect('eliminarPaciente')
+    
     
 
 

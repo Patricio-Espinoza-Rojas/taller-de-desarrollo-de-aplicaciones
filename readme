@@ -44,5 +44,9 @@ https://www.bootstrapcdn.com/
     *crear:
     se crea formulario para crear paciente en paci_nuevo.html, al apretar crear envia un mensaje que qle paciente se agrego
     todo con DBROWSER SQLITE pra base de datos
+    
+    *eliminar:
+    se crea listado de pacientes con boton eliminar
+    
 
 '''
