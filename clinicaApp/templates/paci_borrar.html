@@ -27,7 +27,7 @@
                 <form action="{% url 'eliminar' paciente.id %}"
                  method="post">
                     {% csrf_token %}
-                    <button class="btn btn-danger">
+                    <button class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">
                         <i class="fa fa-trash"></i>
                     </button>
                 </form>
