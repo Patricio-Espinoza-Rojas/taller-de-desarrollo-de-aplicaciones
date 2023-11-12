@@ -31,5 +31,18 @@ https://www.bootstrapcdn.com/
     
     https://docs.djangoproject.com/en/4.1/ref/templates/builtins/
     
+    ******creacion super usuario:********    http://127.0.0.1:8000/Actualizar%20Paciente
+    usuario:admin
+    Pasword:admin12345678
+    
+    con esto en archivo admin.py se incluye la clase de tabla que se creo en models.py y en esa url podemos editar crear eliminar como admin
+    
+    *listar:
+    en el archivo views.py se comienzan a crear las consultas en las funciones para el crud
+    se importan las tablas creadas a realizar consultas en archivo paci_listar
+    
+    *crear:
+    se crea formulario para crear paciente en paci_nuevo.html, al apretar crear envia un mensaje que qle paciente se agrego
+    todo con DBROWSER SQLITE pra base de datos
 
 '''

@@ -6,7 +6,7 @@ class Paciente(models.Model):#tabla llamada paciente
     
     rut_paciente = models.CharField(max_length=9)
     nombre_paciente = models.CharField(max_length=150)
-    direccion_paceinte = models.CharField(max_length=200)
+    direccion_paciente = models.CharField(max_length=200)
     telefono_paciente = models.CharField(max_length=20)
     correo_paciente = models.CharField(max_length=150)
     
