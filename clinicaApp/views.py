@@ -58,11 +58,11 @@ def detalle(request, id):
 def editar(request):
     rut = request.POST["rut"]
     nombre = request.POST["nombre"]
-    direccion = request.POST["direccion"]
+    direccion_paciente = request.POST["direccion"]
     telefono = request.POST["telefono"]
     correo = request.POST["correo"]
     id = request.POST["id"]
-    Paciente.objects.filter(pk=id).update(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
+    Paciente.objects.filter(pk=id).update(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion_paciente,telefono_paciente=telefono,
                   correo_paciente=correo)
     messages.success(request, 'Paciente Actualizado')
     return redirect('actualizarPaciente')
