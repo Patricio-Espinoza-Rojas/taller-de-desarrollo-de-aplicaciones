@@ -40,7 +40,7 @@ class FichaPaciente(models.Model):
     id_especialidad = models.IntegerField(default=0)
     id_receta = models.IntegerField()
 
-class Receta(models.Models):
+class Receta(models.Model):
     id_receta = models.IntegerField()
     medicamentos = models.CharField(max_length=100)
     fecha = models.DateTimeField() 
