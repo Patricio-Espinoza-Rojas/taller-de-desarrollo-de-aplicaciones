@@ -41,13 +41,13 @@ def guardar(request):
                   correo_paciente=correo)
     pa.save()
     messages.success(request, 'Paciente Guardado')
-    return redirect('crearPaciente')
+    return redirect('listarPaciente')
 
 def eliminar(request, id):
     paciente = Paciente.objects.filter(pk=id)
     paciente.delete()
     messages.success(request, 'Paciente eliminado')
-    return redirect('eliminarPaciente')
+    return redirect('listarPaciente')
 
 def detalle(request, id):
     paciente = Paciente.objects.get(pk=id)
@@ -65,7 +65,7 @@ def editar(request):
     Paciente.objects.filter(pk=id).update(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion_paciente,telefono_paciente=telefono,
                   correo_paciente=correo)
     messages.success(request, 'Paciente Actualizado')
-    return redirect('actualizarPaciente')
+    return redirect('listarPaciente')
 
     
     

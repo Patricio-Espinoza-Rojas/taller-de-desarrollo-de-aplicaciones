@@ -31,7 +31,7 @@ class Agenda(models.Model):
     hora = models.DateTimeField()
 
 class FichaPaciente(models.Model):
-    id_icha = models.IntegerField()
+    id_ficha = models.IntegerField()
     anamnesis = models.CharField(max_length=100)
     diagnostico = models.IntegerField()
     fecha = models.DateTimeField()

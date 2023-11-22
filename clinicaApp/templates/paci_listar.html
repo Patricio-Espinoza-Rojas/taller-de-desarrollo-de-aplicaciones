@@ -1,6 +1,12 @@
 {% extends 'clinicaweb.html' %}
 
 {% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">{{message}}</div>
+    {% endfor %}
+{% endif %}
+
     <h1 class="text-center">Lista de Pacientes</h1>
 
     <table class="table table-ligth w-75 mx-auto text-center">
@@ -11,6 +17,8 @@
             <th>Teléfono Paciente</th>
             <th>Correo Paciente</th>
             <th></th>
+            <th></th>
+
     {% for paciente in pacientes %}
         <tr>
             <td>{{paciente.rut_paciente}}</td>
@@ -19,6 +27,22 @@
             <td>{{paciente.telefono_paciente}}</td>
             <td>{{paciente.correo_paciente}}</td>
             <td> 
+                <form action="{% url 'eliminar' paciente.id %}"
+                 method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </form>
+            </td> 
+            <td>               
+                <form action="{% url 'detalle' paciente.id %}"
+                    method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-warning">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </form>
             </td> 
         </tr>   
     {% endfor %}
