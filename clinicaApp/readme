@@ -1,0 +1,12 @@
+''' views son las funciones para la pagina 
+funcion includes para deajar el codigo mas ordenado y se crea un archivo urls en la carpeta de la aplicacion
+mysite es la carpeta donde se llaman las funciones de la carpeta clinicaApp
+
+-Archivo views se crean funciones que se linkean en archivos urls para mostrar y llamar en archivo urls  en carpeta mysite
+-lo mismo en archivo urls.py se llaman a las funciones en carpeta clinicaApp
+-en settings se conecta el projecto priniapl con la aplicacion nueva en installed apps en archivo sttings en carpeta mysite
+-ejecutar migraciones models ....comando:   python manage.py manage makemigrations clinicaApp (para hacer migraciones a la app) crea las tablas automatico.
+-lo crea en carpeta migrations , crea el archivo automatico 0001_initial.py para ver como se esta creando
+-python manage.py migrate clinicaApp luego nos vamos a la basede  datos y nos deberia haber creado la tabla project
+
+
