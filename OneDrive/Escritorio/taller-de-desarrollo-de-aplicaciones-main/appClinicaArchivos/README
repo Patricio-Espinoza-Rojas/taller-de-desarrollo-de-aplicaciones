@@ -1,0 +1,19 @@
+##### BASE DE DATOS WAMPSERVER ####
+'''para ejecutar la base de datos en wamp  en un computador nuevo se debe correr por consola el siguiente comando:
+pip install mysql-connector-python
+y luego ejecutar PhpMyAdmin con el ususario root
+
+https://www.youtube.com/watch?v=T1intZyhXDU /// minuto 40 en adelante para poder ver diseños y vista 
+
+en settings.py se incorporo el directorio de la app:
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'appClinica',
+]
+'''

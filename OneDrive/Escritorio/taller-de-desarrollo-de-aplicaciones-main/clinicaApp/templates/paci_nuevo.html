@@ -1,0 +1,27 @@
+{% extends 'clinicaweb.html' %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+    <h1 class="text-center">Crear Paciente</h1>
+
+    <form class="w-50 shadow mx-auto p-4 m-3" method="post" action="pacientes/guardar">
+        {% csrf_token %}
+        Rut: <input type="text" name="rut" class="form-control my-2" required>
+
+        Nombre: <input type="text" name="nombre" class="form-control my-2" required>
+
+        Dirección: <input type="text" name="direccion" class="form-control my-2" required>
+
+        Teléfono: <input type="text" name="telefono" class="form-control my-2" required>
+
+        Correo: <input type="text" name="correo" class="form-control my-2" required>
+
+        <input type="submit"value="Guardar" class="btn btn-primary">
+
+
+    </form>
+{% endblock %}
