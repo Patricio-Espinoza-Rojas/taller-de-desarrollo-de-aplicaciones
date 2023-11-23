@@ -7,6 +7,9 @@ from django.contrib import messages
 def clinicaKill(request):
     return render(request,"clinicaweb.html")
 
+def inicioSesion(request):
+    return render(request, "login.html")
+
 def about(request):
     return HttpResponse('About')    
 
