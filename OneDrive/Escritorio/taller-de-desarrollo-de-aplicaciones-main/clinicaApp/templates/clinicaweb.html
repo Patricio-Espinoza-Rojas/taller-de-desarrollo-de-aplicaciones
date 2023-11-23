@@ -48,7 +48,8 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'clinica' %}">Inicio</a>
             </li>
-            {% endcomment %} {% comment %} inicio de seseion {% endcomment %}
+            {% endcomment %}
+
             <form
               class="d-flex"
               role="search"
@@ -60,7 +61,7 @@
               class="btn btn-outline-primary ms-2"
               href="{% url 'logout' %}"
               role="button"
-              >Cerrar sesión</a
+              >Cerrar Sesión</a
             >
             {% else %}
             <a
