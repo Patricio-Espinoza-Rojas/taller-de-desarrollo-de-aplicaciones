@@ -19,7 +19,10 @@
           <p class="mt-3">
             <a href="{% url 'password_reset' %}">¿Olvido su cuenta?</a>
           </p>
-          <p class="mt-3">¿Aún no tienes cuenta? <a href="">Registrarse</a></p>
+          <p class="mt-3">
+            ¿Aún no tienes cuenta?
+            <a href="{% url 'users:registration' %}">Registrarse</a>
+          </p>
         </div>
       </div>
 

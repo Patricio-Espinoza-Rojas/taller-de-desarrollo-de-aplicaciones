@@ -58,5 +58,5 @@ class Tipousuario(models.Model):
 
 class Permiso(models.Model):
     id_permiso = models.IntegerField()
-    nombre_permiso = models.CharField(max_length=100)    
+    nombre_permiso = models.CharField(max_length=100)
     
