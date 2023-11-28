@@ -1,0 +1,23 @@
+{% extends 'paci_actualizar.html' %}
+
+{% block content %}
+
+    <h1 class="text-center">Editar Paciente</h1>    
+
+    <form class="w-50 shadow mx-auto p-4 m-3" method="post" action="{% url 'editar' %}">
+        {% csrf_token %}
+        <input type="hidden" name=id value="{{paciente.id}}">
+
+        Rut: <input type="text" name="rut" class="form-control my-2" required value="{{paciente.rut_paciente}}">
+
+        Nombre: <input type="text" name="nombre" class="form-control my-2" required value="{{paciente.nombre_paciente}}">
+
+        Dirección: <input type="text" name="direccion" class="form-control my-2" required value="{{paciente.direccion_paciente}}">
+
+        Teléfono: <input type="text" name="telefono" class="form-control my-2" required value="{{paciente.telefono_paciente}}">
+
+        Correo: <input type="text" name="correo" class="form-control my-2" required value="{{paciente.correo_paciente}}">
+
+        <input type="submit"value="Actualizar" class="btn btn-primary">
+    </form>
+{% endblock%}
