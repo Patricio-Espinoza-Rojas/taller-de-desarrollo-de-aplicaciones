@@ -8,6 +8,12 @@ import re
 def clinicaKill(request):
     return render(request,"clinicaweb.html")
 
+def inicio(request):
+    return render(request, "inicio.html")
+
+def footer(request):
+    return render(request, "footer.html")
+
 def inicioSesion(request):
     return render(request, "login.html")
 

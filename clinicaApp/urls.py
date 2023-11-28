@@ -14,4 +14,6 @@ urlpatterns = [
     path('pacientes/detalle/<int:id>', views.detalle, name='detalle'),
     path('pacientes/editar', views.editar, name='editar'),
     path('inicio sesion', views.inicioSesion, name='inicioSesion'),
+    path('inicio/', views.inicio, name='inicio'),
+    path('footer/', views.footer, name='footer'),
 ]
