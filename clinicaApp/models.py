@@ -4,7 +4,7 @@ from django.db import models
 #para tambien tener los aprametros con sql
 class Paciente(models.Model):#tabla llamada paciente
     #se crearon las tablas falta makemigracionts
-    rut_paciente = models.CharField(max_length=9)
+    rut_paciente = models.CharField(max_length=13)
     nombre_paciente = models.CharField(max_length=150)
     direccion_paciente = models.CharField(max_length=200)
     telefono_paciente = models.CharField(max_length=20)
@@ -44,17 +44,17 @@ class Receta(models.Model):
     id_receta = models.IntegerField()
     medicamentos = models.CharField(max_length=100)
     fecha = models.DateTimeField() 
-    rutPaciente = models.CharField(max_length=100)
+    rutPaciente = models.CharField(max_length=10)
     id_doctor = models.IntegerField()
     
 class Medicamentos(models.Model):
-    id_medicamento = models.CharField(max_length=100)
+    id_medicamento = models.IntegerField()
     nombre_medicamento = models.CharField(max_length=100)
     gramos = models.FloatField()
     
 class Tipousuario(models.Model):
     id_tipousuario = models.IntegerField()
-    nombre_tipousuario = models.IntegerField()
+    nombre_tipousuario = models.CharField(max_length=100)
 
 class Permiso(models.Model):
     id_permiso = models.IntegerField()
