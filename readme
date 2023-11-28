@@ -54,6 +54,6 @@ https://getbootstrap.com/docs/5.3/components/navbar/
     
     ****crear en views, luego en urls, los html de las funciones y views 
     
-    se dejo con dbsqlite
+    
 
 '''
