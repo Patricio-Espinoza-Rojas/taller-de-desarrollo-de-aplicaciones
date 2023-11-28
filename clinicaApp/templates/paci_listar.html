@@ -30,7 +30,7 @@
                 <form action="{% url 'eliminar' paciente.id %}"
                  method="post">
                     {% csrf_token %}
-                    <button class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">
+                    <button class="btn btn-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">
                         <i class="fa fa-trash"></i>
                     </button>
                 </form>
@@ -39,7 +39,7 @@
                 <form action="{% url 'detalle' paciente.id %}"
                     method="post">
                     {% csrf_token %}
-                    <button class="btn btn-warning">
+                    <button class="btn btn-warning" title="Editar">
                         <i class="fa fa-edit"></i>
                     </button>
                 </form>
