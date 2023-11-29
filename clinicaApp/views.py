@@ -6,7 +6,7 @@ import re
 
 # Create your views here.
 def clinicaKill(request):
-    return render(request,"clinicaweb.html")
+    return render(request,"inicio.html")
 
 def inicio(request):
     return render(request, "inicio.html")
@@ -41,38 +41,64 @@ def actualizarPaciente(request):
         'pacientes' : pacientes
     })
 
-# Función para validar el formato del RUT chileno
+#/////////////////////// VALIDACIONES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+# def buscar_rut(rut):
+#     existe_rut = Paciente.objects.filter(rut=rut).exists()
+#     if existe_rut:
+#         messages.error(request, 'Rut no disponible')
+#     else:
+#         messages.success(request, 'Rut disponible')
+#         return redirect('listarPaciente')
+
 def validar_rut(rut):
     rut_pattern = re.compile(r'^\d{1,2}\.\d{3}\.\d{3}-[\dkK]{1}$')
-    return bool(rut_pattern.match(rut))
+    rut_pattern_con_guion = re.compile(r'^\d{1,2}\.\d{3}\.\d{3}-\d{1}$')
+    return bool(rut_pattern.match(rut)) or bool(rut_pattern_con_guion.match(rut))
 
-#crear paciente
+def validar_rutstring(rut):
+    if not re.match("^[0-9\-]+$", rut):
+        return False
+    return True
+
+def validar_nombre(string):
+    if re.match('^[A-Za-záéíóúÁÉÍÚÓñÑ\s]+$', string):
+        return True
+    return False
+
+#crear paciente CON VALIDACIONES ????????????????
 def guardar(request):
     rut = request.POST["rut"]
     nombre = request.POST["nombre"]
     direccion = request.POST["direccion"]
     telefono = request.POST["telefono"]
     correo = request.POST["correo"]
-
-    # Validar longitud máxima para nombre y dirección
-    if len(nombre) > 100 or len(direccion) > 100:
-        messages.error(request, 'Nombre y dirección no deben exceder los 100 caracteres.')
-        return redirect('guardar')
-
+    
+    if validar_rutstring(rut):
+        messages.success(request,'Rut Validado sin letras')        
+    else:
+        messages.error(request,"No se admiten letras en Rut")
+        return redirect('listarPaciente')
+    
     # Validar longitud máxima para el RUT
     if len(rut) < 2 or len(rut) > 12:
         messages.error(request, 'Rut Inválido.')
+        return redirect('listarPaciente')   
+ 
+    # Validar longitud máxima para nombre y dirección
+    if len(nombre) > 100 or len(direccion) > 100:
+        messages.error(request, 'Nombre y dirección no deben exceder los 100 caracteres.')
         return redirect('listarPaciente')
     
-    # Validar el formato del RUT
-    if not rut or not validar_rut(rut):
-        messages.error(request, 'Rut No Válido.')
-        return redirect('listarPaciente')
-    
+    if validar_nombre(nombre):
+        messages.success(request, 'Nombre Validado')
+    else:
+        messages.error(request, "Nombre incorrecto")
+        return redirect('listarPaciente') 
+
     # Validar que el nombre y la dirección contengan solo letras y espacios
-    if not (nombre.replace(" ", "").isalpha() and direccion.replace(" ", "").isalpha()):
-        messages.error(request, 'Nombre y dirección solo deben contener letras y espacios.')
-        return redirect('guardar')   
+    if not (nombre.replace(" ", "").isalpha()):
+        messages.error(request, 'Nombre solo deben contener letras y espacios.')
+        return redirect('listarPaciente')   
     
     pa = Paciente(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
                     correo_paciente=correo)
@@ -95,30 +121,39 @@ def detalle(request, id):
 def editar(request):
     rut = request.POST["rut"]
     nombre = request.POST["nombre"]
-    direccion_paciente = request.POST["direccion"]
+    direccion = request.POST["direccion"]
     telefono = request.POST["telefono"]
     correo = request.POST["correo"]
     id = request.POST["id"]
     
-    if not rut or not validar_rut(rut):
-        messages.error(request, 'Rut No Válido.')
-        return redirect('listarPaciente')
+    # if validar_rutstring(rut):
+    #     messages.success(request,'Rut Validado sin letras')        
+    # else:
+    #     messages.error(request,"No se admiten letras en Rut")
+    #     return redirect('listarPaciente')
     
+    # Validar longitud máxima para el RUT
     if len(rut) < 2 or len(rut) > 12:
         messages.error(request, 'Rut Inválido.')
+        return redirect('listarPaciente')   
+ 
+    # Validar longitud máxima para nombre y dirección
+    if len(nombre) > 100 or len(direccion) > 100:
+        messages.error(request, 'Nombre y dirección no deben exceder los 100 caracteres.')
         return redirect('listarPaciente')
     
-    # Validar que no se admitan caracteres especiales en el nombre y la dirección
-    if not (nombre.replace(" ", "").isalnum() and direccion_paciente.replace(" ", "").isalnum()):
-        messages.error(request, 'Nombre y dirección no deben contener caracteres especiales.')
-        return redirect('listarPaciente')
-
-    # Validar que el teléfono contenga solo números
-    if not telefono.isdigit():
-        messages.error(request, 'Teléfono solo debe contener números.')
+    if validar_nombre(nombre):
+        messages.success(request, 'Nombre Validado')
+    else:
+        messages.error(request, "Nombre incorrecto")
         return redirect('listarPaciente') 
+
+    # Validar que el nombre y la dirección contengan solo letras y espacios
+    if not (nombre.replace(" ", "").isalpha()):
+        messages.error(request, 'Nombre solo deben contener letras y espacios.')
+        return redirect('listarPaciente')   
     
-    Paciente.objects.filter(pk=id).update(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion_paciente,telefono_paciente=telefono,
+    Paciente.objects.filter(pk=id).update(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
                     correo_paciente=correo)
     messages.success(request, 'Paciente Actualizado')
     return redirect('listarPaciente')
