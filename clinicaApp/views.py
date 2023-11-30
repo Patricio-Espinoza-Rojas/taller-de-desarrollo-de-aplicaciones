@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse 
-from clinicaApp.models import Paciente, Doctor
+from clinicaApp.models import Paciente, Doctor, Especialidad, Agenda, FichaPaciente, Receta, Medicamentos, Tipousuario, Permiso
 from django.contrib import messages
 import re
 
@@ -40,8 +40,13 @@ def inicioSesion(request):
 def about(request):
     return HttpResponse('About')    
 
+#MODULOS FUNCIONES PARA PACIENTE
 
-#///////////////////// PACIENTES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#*********************************************************************************************************
+#*********************************************************************************************************
+#///////////////////// PACEINTES, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#********************************************************************************************************
+#********************************************************************************************************
 
 def crearPaciente(request):
     return render(request, "paci_nuevo.html")
@@ -64,35 +69,6 @@ def actualizarPaciente(request):
         'pacientes' : pacientes
     })
 
-#///////////////////// MÉDICOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-def ingresarDoctor(request):
-    doctor = Doctor.objects.all()
-    return render(request, "medicos_nuevos.html",{
-        'doctor' : doctor
-    })
-
-def eliminarDoctor(request):
-    doctor = Doctor.objects.all()
-    return render(request, "medicos_borrar.html",{
-        'doctor' : doctor
-    })
-
-def listarDoctor(request):
-    doctor = Doctor.objects.all()
-    return render(request, "medicos_listar.html",{
-        'doctor' : doctor
-    })
-
-def actualizarDoctor(request):
-    doctor = Doctor.objects.all()
-    return render(request, "medicos_actualizar.html",{
-        'doctor' : doctor
-    })
-
-
-
-#/////////////////////// VALIDACIONES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 # def buscar_rut(rut):
 #     existe_rut = Paciente.objects.filter(rut=rut).exists()
 #     if existe_rut:
@@ -101,22 +77,24 @@ def actualizarDoctor(request):
 #         messages.success(request, 'Rut disponible')
 #         return redirect('listarPaciente')
 
+#VALIDAR PUNTOS Y GUIÓN
 def validar_rut(rut):
     rut_pattern = re.compile(r'^\d{1,2}\.\d{3}\.\d{3}-[\dkK]{1}$')
     rut_pattern_con_guion = re.compile(r'^\d{1,2}\.\d{3}\.\d{3}-\d{1}$')
     return bool(rut_pattern.match(rut)) or bool(rut_pattern_con_guion.match(rut))
 
+#VALIDAR SOLO NUMEROS
 def validar_rutstring(rut):
-    if not re.match("^[0-9\-]+$", rut):
+    if not re.match("^[0-9\-.]+$", rut):
         return False
     return True
-
-def validar_nombre(string):
+#VAlidar nombre aceptar Ñ  y tilde solo letras
+def validar_nombreapellido(string):
     if re.match('^[A-Za-záéíóúÁÉÍÚÓñÑ\s]+$', string):
         return True
     return False
 
-#crear paciente CON VALIDACIONES ????????????????
+#CREAR PACIENTE CON FUNCIONES DE VALIDACIONES 
 def guardar(request):
     rut = request.POST["rut"]
     nombre = request.POST["nombre"]
@@ -140,7 +118,7 @@ def guardar(request):
         messages.error(request, 'Nombre y dirección no deben exceder los 100 caracteres.')
         return redirect('listarPaciente')
     
-    if validar_nombre(nombre):
+    if validar_nombreapellido(nombre):
         messages.success(request, 'Nombre Validado')
     else:
         messages.error(request, "Nombre incorrecto")
@@ -157,17 +135,22 @@ def guardar(request):
     messages.success(request, 'Paciente Guardado')
     return redirect('listarPaciente')
 
+#/////////VALIDACIONES EN EDITAR PACIENTE\\\\\\\\\\\\\\\\\\\\\\\\
+
+#Eliminar del listado con boton
 def eliminar(request, id):
     paciente = Paciente.objects.filter(pk=id)
     paciente.delete()
     messages.success(request, 'Paciente eliminado')
     return redirect('listarPaciente')
 
+#listar para actualizar 
 def detalle(request, id):
     paciente = Paciente.objects.get(pk=id)
     return render(request, "paciente_editar.html",{
         'paciente' : paciente
     })
+
 
 def editar(request):
     rut = request.POST["rut"]
@@ -193,7 +176,7 @@ def editar(request):
         messages.error(request, 'Nombre y dirección no deben exceder los 100 caracteres.')
         return redirect('listarPaciente')
     
-    if validar_nombre(nombre):
+    if validar_nombreapellido(nombre):
         messages.success(request, 'Nombre Validado')
     else:
         messages.error(request, "Nombre incorrecto")
@@ -210,11 +193,37 @@ def editar(request):
     return redirect('listarPaciente')
 
 
+#*********************************************************************************************************
+#*********************************************************************************************************
+#///////////////////// MÉDICOS, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#********************************************************************************************************
+#********************************************************************************************************
 
+def ingresarDoctor(request):
+    doctor = Doctor.objects.all()
+    return render(request, "medicos_nuevos.html",{
+        'doctor' : doctor
+    })
 
+def eliminarDoctor(request):
+    doctor = Doctor.objects.all()
+    return render(request, "medicos_borrar.html",{
+        'doctor' : doctor
+    })
 
-#\\\\\\\\\\\\\\\\\ VALIDACIONES DOCTOR\\\\\\\\\\\\\\\\\\\\\    
+def listarDoctor(request):
+    doctor = Doctor.objects.all()
+    return render(request, "medicos_listar.html",{
+        'doctor' : doctor
+    })
 
+def actualizarDoctor(request):
+    doctor = Doctor.objects.all()
+    return render(request, "medicos_actualizar.html",{
+        'doctor' : doctor
+    })
+
+#\\\\\\\\\\\\\\\\\ VALIDACIONES DOCTOR\\\\\\\\\\\\\\\\\\\\\
 
 def validar_idDoctor(id_doctor):
     id_pattern = re.compile(r'^\d{1,2}\.\d{3}\.\d{3}-[\dkK]{1}$')
@@ -230,8 +239,6 @@ def validar_nombreDoctor(string):
     if re.match('^[A-Za-záéíóúÁÉÍÚÓñÑ\s]+$', string):
         return True
     return False
-
-
 
 #\\\\\\\\\\\\\\\\\\\\\CREAR DOCTOR CON VALIDACIONES\\\\\\\\\\\\\\\\\\\\\\\\\    
     
@@ -258,7 +265,7 @@ def guardar_doctor(request):
         messages.error(request, 'Nombre, título del profesional, y especialidad no deben exceder los 100 caracteres.')
         return redirect('listarDoctor')
     
-    if validar_nombre(nombre_doctor):
+    if validar_nombreapellido(nombre_doctor):
         messages.success(request, 'Nombre Validado')
     else:
         messages.error(request, "Nombre incorrecto")
@@ -293,4 +300,5 @@ def editar_doctor(request):
     titulo_profesional = request.POST["titulo"]
     id_especialidad = request.POS["especialidad"]
     correo_doctor = request.POST["correo_doctor"]
+
 
