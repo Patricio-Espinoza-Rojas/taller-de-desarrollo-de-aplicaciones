@@ -1,18 +1,72 @@
 {% extends 'clinicaweb.html' %}
 {% block content %}
+{% load static %}
 <div id="carouselContainner" class="carousel slide mx-auto m-4 shadow" style="width: 50%;" data-ride="carousel" data-interval="50"  data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="https://www.foronuclear.org/wp-content/uploads/2010/06/medicina-nuclear.jpg" class="d-block w-100" alt="...">
+        <img src="{% static 'img/medicina-1.jpg' %}" class="d-block w-100" alt="Imagen 1">
+        
       </div>
       <div class="carousel-item">
-        <img src="https://observatorio.tec.mx/wp-content/uploads/2020/06/TheRoleofaMedicalandHealthSciencesStudentDuringaPandemic.jpg" class="d-block w-100" alt="...">
+        <img src="{% static 'img/medicina-2.jpg' %}" class="d-block w-100" alt="Imagen 2">
       </div>
-      <div class="carousel-item">
-        <img src="https://centromedicoabc.com/wp-content/uploads/2022/08/medicina-interna.jpg" class="d-block w-100" alt="...">
+      <img src="{% static 'img/medicina-3.jpg' %}" class="d-block w-100" alt="Imagen 3">
       </div>
     </div>
   </div>
+
+  <!-- Sección de servicios -->
+<div class="container mt-5">
+  <h2>Nuestros servicios</h2>
+  <div class="row">
+      {% for servicio in servicios %}
+      <div class="col-md-4">
+          <div class="card">
+              <img src="{% static servicio.imagen %}" class="card-img-top" alt="{{ servicio.nombre }}">
+              <div class="card-body">
+                  <h5 class="card-title">{{ servicio.nombre }}</h5>
+                  <p class="card-text">{{ servicio.descripcion }}</p>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+
+<!-- Sección de equipo médico -->
+<div class="container mt-5">
+  <h2>Nuestro equipo</h2>
+  <div class="row">
+      {% for medico in equipo %}
+      <div class="col-md-4">
+          <div class="card">
+              <img src="{% static medico.foto %}" class="card-img-top" alt="{{ medico.nombre }}">
+              <div class="card-body">
+                  <h5 class="card-title">{{ medico.nombre }}</h5>
+                  <p class="card-text">{{ medico.especialidad }}</p>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+
+<!-- Sección de testimonios -->
+<div class="container mt-5">
+  <h2>Testimonios</h2>
+  {% for testimonio in testimonios %}
+  <blockquote class="blockquote">
+      <p>{{ testimonio.mensaje }}</p>
+      <footer class="blockquote-footer">{{ testimonio.nombre }}</footer>
+  </blockquote>
+  {% endfor %}
+</div>
+
+<!-- Sección de contacto -->
+<div class="container mt-5">
+  <h2>Contacto</h2>
+  <!-- ... tu formulario de contacto aquí ... -->
+</div>
 
 {% include 'footer.html' %}
 {% endblock %}

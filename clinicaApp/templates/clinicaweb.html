@@ -81,7 +81,22 @@
             </li>
             {% endcomment %}
 
-            {% comment %} inicio de seseion {% endcomment %}
+            {% comment %} medicos {% endcomment %}
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'ingresarDoctor' %}"
+                >Crear Médicos</a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'listarDoctor' %}"
+                >Listar Médicos</a
+              >
+            </li>
+
+
+            {% comment %} inicio de sesion {% endcomment %}
             <div>
             <form
               class="d-flex"

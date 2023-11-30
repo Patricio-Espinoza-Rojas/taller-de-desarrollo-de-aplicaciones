@@ -1,7 +1,7 @@
 {% extends 'clinicaweb.html' %}
 
 {% block content %}
-    <h1 class="text-center">Actualizar Paciente</h1>
+    <h1 class="text-center">Actualizar Médicos</h1>
     {% if messages %}
     {% for message in messages %}
         <div class="alert alert-success">{{message}}</div>
@@ -10,21 +10,21 @@
 
     <table class="table table-ligth w-75 mx-auto text-center">
         <tr class="table-dark">
-            <th>Rut Paciente</th>
-            <th>Nombre Paciente</th>
-            <th>Dirección Paciente</th>
-            <th>Teléfono Paciente</th>
-            <th>Correo Paciente</th>
+            <th>Id Médico</th>
+            <th>Nombre</th>
+            <th>Titúlo del Profesional</th>
+            <th>Especialidad del profesional</th>
+            <th>Correo</th>
             <th></th>
-    {% for paciente in pacientes %}
+    {% for doctor in Doctor %}
         <tr>
-            <td>{{paciente.rut_paciente}}</td>
-            <td>{{paciente.nombre_paciente}}</td>
-            <td>{{paciente.direccion_paciente}}</td>
-            <td>{{paciente.telefono_paciente}}</td>
-            <td>{{paciente.correo_paciente}}</td>
+            <td>{{doctor.id_doctor}}</td>
+            <td>{{doctor.nombre_doctor}}</td>
+            <td>{{doctor.titulo}}</td>
+            <td>{{doctor.id_especialidad}}</td>
+            <td>{{doctor.correo}}</td>
             <td>               
-                <form action="{% url 'detalle' paciente.id %}"
+                <form action="{% url 'detalle_doctor' doctor.id_doctor %}"
                     method="post">
                     {% csrf_token %}
                     <button class="btn btn-warning">
