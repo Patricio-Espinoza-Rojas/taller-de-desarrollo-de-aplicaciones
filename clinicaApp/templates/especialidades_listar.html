@@ -7,28 +7,22 @@
     {% endfor %}
 {% endif %}
 
-    <h1 class="text-center">Lista de Médicos</h1>
+    <h1 class="text-center">Lista de Especialidades</h1>
 
     <table class="table table-ligth w-75 mx-auto text-center">
         <tr class="table-dark">
-            <th>Id Médico</th>
-            <th>Nombre Médico</th>
-            <th>Título del Profesional</th>
-            <th>Especialidad del profesional</th>
-            <th>Correo</th>
+            <th>Id Especialidad</th>
+            <th>Nombre Especialidad</th>
             <th></th>
             <th></th>
-#ARREGLAR ID ESPECIALIDAD
-    {% for medico in medicos %}
+
+    {% for especialidad in especialidades %}
         <tr>
-            <td>{{medico.id_doctor}}</td>
-            <td>{{medico.nombre_doctor}}</td>
-            <td>{{medico.titulo}}</td>
-            <td>{{medico.}}</td>
-            <td>{{medico.correo}}</td>
+            <td>{{especialidad.id_especialidad}}</td>
+            <td>{{especialidad.nombre_especialidad}}</td>
             <td> 
-                {% comment %} <form action="{% url 'eliminar_doctor' Doctor.id_doctor %}"
-                 method="post">
+                {% comment %} <form action="{% url 'eliminar' especialidad.id_especialidad %}"
+                    method="post">
                     {% csrf_token %}
                     <button class="btn btn-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">
                         <i class="fa fa-trash"></i>
@@ -36,14 +30,14 @@
                 </form>
             </td> 
             <td>               
-                <form action="{% url 'detalle_doctor' Doctor.id_doctor %}"
+                <form action="{% url 'detalle' especialidad.id_especialidad %}"
                     method="post">
                     {% csrf_token %}
                     <button class="btn btn-warning" title="Editar">
                         <i class="fa fa-edit"></i>
-                    </button>
-                </form>
-            </td>  {% endcomment %}
+                    </button> {% endcomment %}
+                {% comment %} </form> {% endcomment %}
+            </td> 
         </tr>   
     {% endfor %}
     </table>

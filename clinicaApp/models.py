@@ -11,12 +11,11 @@ class Paciente(models.Model):#tabla llamada paciente
     correo_paciente = models.CharField(max_length=150)
     
 class Especialidad(models.Model):
-    
-    id_especialidad = models.IntegerField() 
-    nombre_especialidad = models.CharField(max_length=150) 
+    id_especialidad = models.AutoField(primary_key=True)
+    nombre_especialidad = models.CharField(max_length=255)
 
 class Doctor(models.Model):
-    id_doctor = models.IntegerField(primary_key=True)
+    id_doctor = models.AutoField(primary_key=True)
     nombre_doctor = models.CharField(max_length=150)
     titulo = models.CharField(max_length=150)
     especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE, default=1)

@@ -22,11 +22,12 @@ urlpatterns = [
     path('testimonios/', views.testimonios, name='testimonios'),
     path('contacto/', views.contacto, name='contacto'),
     path('footer/', views.footer, name='footer'),
-    path('Ingresar Doctor', views.ingresarDoctor, name='ingresarDoctor'),
+    path('Crear Médicos', views.crearDoctor, name='crearDoctor'),
     path('Eliminar Doctor', views.eliminarDoctor, name='eliminarDoctor'),
     path('Listar Doctor', views.listarDoctor, name='listarDoctor'),
     path('Actualizar Doctor', views.actualizarDoctor, name='actualizarDoctor'),
-    path('Doctor/guardar_doctor', views.ingresarDoctor, name='guardar_doctor'),
+    path('doctor/guardar', views.guardarDoctor, name='guardar_doctor'),
+    path('Especialidad/listarespecialidad', views.listarespecialidad, name='listarespecialidad'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

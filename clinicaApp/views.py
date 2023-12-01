@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse 
 from clinicaApp.models import Paciente, Doctor, Especialidad, Agenda, FichaPaciente, Receta, Medicamentos, Tipousuario, Permiso
 from .forms import AgendaForm
+
 from django.contrib import messages
 import re
 
@@ -19,10 +20,10 @@ def inicio(request):
             return redirect('inicio')
     else:
         form = AgendaForm()
-    doctores = Doctor.objects.all()
-    especialidades = Especialidad.objects.all()
-    equipo = Doctor.objects.all()  # Cambia Medico por Doctor
-    return render(request, 'inicio.html', {
+        doctores = Doctor.objects.all()
+        especialidades = Especialidad.objects.all()
+        equipo = Doctor.objects.all()  # Cambia Medico por Doctor
+        return render(request, 'inicio.html', {
         'form': form,
         'doctores': doctores,
         'especialidades': especialidades,
@@ -74,16 +75,6 @@ def agendar_cita(request):
     else:
         form = AgendaForm()
     return render(request, 'agendar_cita.html', {'form': form})
-
-
-
-
-
-
-
-
-
-
 
 #MODULOS FUNCIONES PARA PACIENTE
 
@@ -244,34 +235,15 @@ def editar(request):
 #********************************************************************************************************
 #********************************************************************************************************
 
+def crearDoctor(request):
+    especialidades = Especialidad.objects.all()
+
+    return render(request, "medicos_nuevos.html", {'lista_especialidades': especialidades})
+
 # Listar doctores
 def listarDoctor(request):
     medicos = Doctor.objects.all()  # Recuperar todos los médicos de la base de datos
     return render(request, 'medicos_listar.html', {'medicos': medicos})  # Pasar los médicos a la plantilla
-
-# Agregar doctor
-def ingresarDoctor(request):
-    if request.method == 'POST':
-        id_doctor = request.POST["id_doctor"]
-        nombre_doctor = request.POST["nombre_doctor"]
-        titulo = request.POST["titulo"]
-        especialidad_nombre = request.POST["especialidad"]
-        correo = request.POST["correo_doctor"]
-        foto = request.FILES.get("foto", None)
-
-        # Buscar el ID de la especialidad en la base de datos
-        try:
-            especialidad = Especialidad.objects.get(nombre_especialidad=especialidad_nombre)
-        except Especialidad.DoesNotExist:
-            messages.error(request, 'Especialidad no encontrada.')
-            return redirect('listarDoctor')
-
-        # Crear y guardar el nuevo Doctor
-        doctor = Doctor(id_doctor=id_doctor, nombre_doctor=nombre_doctor, titulo=titulo, especialidad=especialidad, correo=correo, foto=foto)
-        doctor.save()
-
-        messages.success(request, 'Doctor guardado con éxito.')
-        return redirect('listarDoctor')
 
 def validar_idInt(id_doctor):
     # Esta función verifica si el id_doctor solo contiene números
@@ -282,26 +254,15 @@ def validar_nombreDoctor(nombre_doctor):
     pattern = re.compile(r'^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')
     return bool(pattern.match(nombre_doctor))
 
-def ingresarDoctor(request):
+def guardarDoctor(request):
+    especialidades = Especialidad.objects.all()
+
     if request.method == 'POST':
-        id_doctor = request.POST["id_doctor"]
-        nombre_doctor = request.POST["nombre_doctor"]
-        titulo = request.POST["titulo"]
-        especialidad_nombre = request.POST["especialidad"]
-        correo = request.POST["correo_doctor"]
+        nombre_doctor = request.POST.get("nombre_doctor")
+        titulo = request.POST.get("titulo")
+        id_especialidad = request.POST.get("especialidad")
+        correo = request.POST.get("correo_doctor")
         foto = request.FILES.get("foto", None)
-
-        # Buscar el ID de la especialidad en la base de datos
-        try:
-            especialidad = Especialidad.objects.get(nombre_especialidad=especialidad_nombre)
-            id_especialidad = especialidad.id_especialidad
-        except Especialidad.DoesNotExist:
-            messages.error(request, 'Especialidad no encontrada.')
-            return redirect('listarDoctor')
-
-        if len(id_doctor) < 2 or len(id_doctor) > 12:
-            messages.error(request, 'Id Inválido.')
-            return redirect('listarDoctor')   
 
         if len(nombre_doctor) > 100 or len(titulo) > 100:
             messages.error(request, 'Nombre, título del profesional, y especialidad no deben exceder los 100 caracteres.')
@@ -311,13 +272,30 @@ def ingresarDoctor(request):
             messages.error(request, "Nombre incorrecto")
             return redirect('listarDoctor') 
 
-        doc = Doctor(id_doctor=id_doctor, nombre_doctor=nombre_doctor, titulo=titulo,id_especialidad=id_especialidad, 
-                    correo=correo, foto=foto)
+        # Verificar si la especialidad con el id proporcionado existe
+        try:
+            especialidad = Especialidad.objects.get(id_especialidad=id_especialidad)
+        except Especialidad.DoesNotExist:
+            messages.error(request, 'Especialidad no encontrada.')
+            return redirect('listarDoctor')
+
+        doc = Doctor(
+            nombre_doctor=nombre_doctor,
+            titulo=titulo,
+            especialidad=especialidad,
+            correo=correo,
+            foto=foto
+        )
         doc.save()
         messages.success(request, 'Doctor Guardado')
         return redirect('listarDoctor')
+
     else:
-        return render(request, "medicos_nuevos.html")
+        # Obtener el valor de 'especialidad' directamente del QueryDict
+        id_especialidad = request.POST.getlist("especialidad")
+        form = especialidad(initial={'especialidad': id_especialidad}) 
+        return render(request, "medicos_nuevos.html", {'form': form, 'lista_especialidades': especialidades})
+
 
 # Eliminar doctor
 def eliminarDoctor(request, id_doctor):
@@ -359,3 +337,11 @@ def editar_doctor(request, id_doctor):
         return render(request, "medicos_editar.html",{
             'doctor' : doctor
         })
+
+
+###ESPECIALIDAD
+def listarespecialidad(request):
+    especialidades = Especialidad.objects.all() 
+    return render(request, "especialidades_listar.html",{
+        'especialidades' : especialidades
+    })
