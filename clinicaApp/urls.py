@@ -1,5 +1,7 @@
 from django.urls import path
-from . import views 
+from . import views
+from django.conf import settings
+from django.conf.urls.static import static 
 
 
 urlpatterns = [
@@ -24,8 +26,7 @@ urlpatterns = [
     path('Eliminar Doctor', views.eliminarDoctor, name='eliminarDoctor'),
     path('Listar Doctor', views.listarDoctor, name='listarDoctor'),
     path('Actualizar Doctor', views.actualizarDoctor, name='actualizarDoctor'),
-    path('Doctor/guardar_doctor', views.guardar_doctor, name='guardar_doctor'),
-    path('Doctor/eliminar_doctor/<int:id_doctor>', views.eliminar_doctor, name='eliminar_doctor'),
-    path('Doctor/detalle_doctor/<int:id_doctor>', views.detalle_doctor, name='detalle_doctor'),
-    path('Doctor/editar_doctor', views.editar_doctor, name='editar_doctor'),
+    path('Doctor/guardar_doctor', views.ingresarDoctor, name='guardar_doctor'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

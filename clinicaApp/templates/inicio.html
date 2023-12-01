@@ -1,6 +1,7 @@
 {% extends 'clinicaweb.html' %}
 {% block content %}
 {% load static %}
+<!-- Carrusel -->
 <div id="carouselContainner" class="carousel slide mx-auto m-4 shadow" style="width: 50%;" data-ride="carousel" data-interval="50"  data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
@@ -15,35 +16,64 @@
     </div>
   </div>
 
-  <!-- Sección de servicios -->
+ <!-- Sección Agendar cita -->
 <div class="container mt-5">
-  <h2>Nuestros servicios</h2>
-  <div class="row">
-      {% for servicio in servicios %}
-      <div class="col-md-4">
-          <div class="card">
-              <img src="{% static servicio.imagen %}" class="card-img-top" alt="{{ servicio.nombre }}">
-              <div class="card-body">
-                  <h5 class="card-title">{{ servicio.nombre }}</h5>
-                  <p class="card-text">{{ servicio.descripcion }}</p>
-              </div>
-          </div>
-      </div>
-      {% endfor %}
+  <div class="row justify-content-center">
+    <div class="col-md-3 shadow">
+      <h2 class="text-center text-primary py-4">Agendar cita</h2>
+      <form method="post" class="needs-validation mt-4 p-5 m-4" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.as_p }}
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary">Agendar cita</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
-<!-- Sección de equipo médico -->
+  <!-- Sección Nuestros servicios -->
+  <div class="container mt-5">
+    <h2 class="text-center text-secondary">Nuestros servicios</h2>
+    <div class="row">
+      {% for servicio in servicios %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <img src="{{ servicio.imagen.url }}" class="card-img-top" alt="{{ servicio.nombre }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ servicio.nombre }}</h5>
+            <p class="card-text">{{ servicio.descripcion }}</p>
+            <a href="{{ servicio.url }}" class="btn btn-primary">Más información</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center">No hay servicios disponibles en este momento.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+<!-- Sección  equipo medico -->
+
 <div class="container mt-5">
   <h2>Nuestro equipo</h2>
   <div class="row">
-      {% for medico in equipo %}
+      {% for Doctor in equipo %}
       <div class="col-md-4">
           <div class="card">
-              <img src="{% static medico.foto %}" class="card-img-top" alt="{{ medico.nombre }}">
+              {% if Doctor.foto %}
+              <img src="{{ Doctor.foto.url }}" class="card-img-top" alt="{{ Doctor.nombre_doctor }}">
+              {% else %}
+              <!-- Aquí puedes poner una imagen por defecto en caso de que el doctor no tenga una foto -->
+              <img src="{% static 'img/medicina-3.jpg' %}" class="card-img-top" alt="Imagen por defecto">
+              {% endif %}
               <div class="card-body">
-                  <h5 class="card-title">{{ medico.nombre }}</h5>
-                  <p class="card-text">{{ medico.especialidad }}</p>
+                  <h5 class="card-title">{{ Doctor.nombre_doctor }}</h5>
+                  <p class="card-text">{{ Doctor.titulo }}</p>
               </div>
           </div>
       </div>

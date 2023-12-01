@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse 
 from clinicaApp.models import Paciente, Doctor, Especialidad, Agenda, FichaPaciente, Receta, Medicamentos, Tipousuario, Permiso
+from .forms import AgendaForm
 from django.contrib import messages
 import re
 
@@ -11,7 +12,22 @@ def clinicaKill(request):
     return render(request,"inicio.html")
 
 def inicio(request):
-    return render(request, "inicio.html")
+    if request.method == 'POST':
+        form = AgendaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('inicio')
+    else:
+        form = AgendaForm()
+    doctores = Doctor.objects.all()
+    especialidades = Especialidad.objects.all()
+    equipo = Doctor.objects.all()  # Cambia Medico por Doctor
+    return render(request, 'inicio.html', {
+        'form': form,
+        'doctores': doctores,
+        'especialidades': especialidades,
+        'equipo': equipo,  # Ahora 'equipo' contiene los doctores
+    })
 
 def servicios(request):
     servicios = Servicio.objects.all()
@@ -40,11 +56,40 @@ def inicioSesion(request):
 def about(request):
     return HttpResponse('About')    
 
+
+#MODULOS FUNCIONES PARA VISTA INICIO
+
+#*********************************************************************************************************
+#*********************************************************************************************************
+#///////////////////// VISTA INICIO, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#********************************************************************************************************
+#********************************************************************************************************
+
+def agendar_cita(request):
+    if request.method == 'POST':
+        form = AgendaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('inicio')
+    else:
+        form = AgendaForm()
+    return render(request, 'agendar_cita.html', {'form': form})
+
+
+
+
+
+
+
+
+
+
+
 #MODULOS FUNCIONES PARA PACIENTE
 
 #*********************************************************************************************************
 #*********************************************************************************************************
-#///////////////////// PACEINTES, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#///////////////////// PACIENTES, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #********************************************************************************************************
 #********************************************************************************************************
 
@@ -199,106 +244,118 @@ def editar(request):
 #********************************************************************************************************
 #********************************************************************************************************
 
-def ingresarDoctor(request):
-    doctor = Doctor.objects.all()
-    return render(request, "medicos_nuevos.html",{
-        'doctor' : doctor
-    })
-
-def eliminarDoctor(request):
-    doctor = Doctor.objects.all()
-    return render(request, "medicos_borrar.html",{
-        'doctor' : doctor
-    })
-
+# Listar doctores
 def listarDoctor(request):
-    doctor = Doctor.objects.all()
-    return render(request, "medicos_listar.html",{
-        'doctor' : doctor
-    })
+    medicos = Doctor.objects.all()  # Recuperar todos los médicos de la base de datos
+    return render(request, 'medicos_listar.html', {'medicos': medicos})  # Pasar los médicos a la plantilla
 
-def actualizarDoctor(request):
-    doctor = Doctor.objects.all()
-    return render(request, "medicos_actualizar.html",{
-        'doctor' : doctor
-    })
+# Agregar doctor
+def ingresarDoctor(request):
+    if request.method == 'POST':
+        id_doctor = request.POST["id_doctor"]
+        nombre_doctor = request.POST["nombre_doctor"]
+        titulo = request.POST["titulo"]
+        especialidad_nombre = request.POST["especialidad"]
+        correo = request.POST["correo_doctor"]
+        foto = request.FILES.get("foto", None)
 
-#\\\\\\\\\\\\\\\\\ VALIDACIONES DOCTOR\\\\\\\\\\\\\\\\\\\\\
+        # Buscar el ID de la especialidad en la base de datos
+        try:
+            especialidad = Especialidad.objects.get(nombre_especialidad=especialidad_nombre)
+        except Especialidad.DoesNotExist:
+            messages.error(request, 'Especialidad no encontrada.')
+            return redirect('listarDoctor')
 
-def validar_idDoctor(id_doctor):
-    id_pattern = re.compile(r'^\d{1,2}\.\d{3}\.\d{3}-[\dkK]{1}$')
-    id_pattern_solo_numeros = re.compile(r'^\d{1,2}\.\d{3}\.\d{3}-\d{1}$')
-    return bool(id_pattern.match(id_doctor)) or bool(id_pattern_solo_numeros.match(id_doctor))
+        # Crear y guardar el nuevo Doctor
+        doctor = Doctor(id_doctor=id_doctor, nombre_doctor=nombre_doctor, titulo=titulo, especialidad=especialidad, correo=correo, foto=foto)
+        doctor.save()
 
-def validar_idString(id_doctor):
-    if not re.match("^[0-9\-]+$", id_doctor):
-        return False
-    return True
-
-def validar_nombreDoctor(string):
-    if re.match('^[A-Za-záéíóúÁÉÍÚÓñÑ\s]+$', string):
-        return True
-    return False
-
-#\\\\\\\\\\\\\\\\\\\\\CREAR DOCTOR CON VALIDACIONES\\\\\\\\\\\\\\\\\\\\\\\\\    
-    
-def guardar_doctor(request):
-    id_doctor = request.POST["id_doctor"]
-    nombre_doctor = request.POST["nombre_doctor"]
-    titulo = request.POST["titulo"]
-    id_especialidad = request.POST["especialidad"]
-    correo = request.POST["correo_doctor"]
-    
-    if validar_idString(id_doctor):
-        messages.success(request,'Id Validado sin letras')        
-    else:
-        messages.error(request,"No se admiten letras en id")
+        messages.success(request, 'Doctor guardado con éxito.')
         return redirect('listarDoctor')
-    
-    # Validar longitud máxima para el ID
-    if len(id_doctor) < 2 or len(id_doctor) > 12:
-        messages.error(request, 'Id Inválido.')
-        return redirect('listarDoctor')   
- 
-    # Validar longitud máxima para nombre, Título profesional y especialidad
-    if len(nombre_doctor) > 100 or len(titulo) :
-        messages.error(request, 'Nombre, título del profesional, y especialidad no deben exceder los 100 caracteres.')
+
+def validar_idInt(id_doctor):
+    # Esta función verifica si el id_doctor solo contiene números
+    return id_doctor.isdigit()
+
+def validar_nombreDoctor(nombre_doctor):
+    # Esta expresión regular acepta letras, acentos, "ñ" y espacios, y es insensible a mayúsculas y minúsculas
+    pattern = re.compile(r'^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')
+    return bool(pattern.match(nombre_doctor))
+
+def ingresarDoctor(request):
+    if request.method == 'POST':
+        id_doctor = request.POST["id_doctor"]
+        nombre_doctor = request.POST["nombre_doctor"]
+        titulo = request.POST["titulo"]
+        especialidad_nombre = request.POST["especialidad"]
+        correo = request.POST["correo_doctor"]
+        foto = request.FILES.get("foto", None)
+
+        # Buscar el ID de la especialidad en la base de datos
+        try:
+            especialidad = Especialidad.objects.get(nombre_especialidad=especialidad_nombre)
+            id_especialidad = especialidad.id_especialidad
+        except Especialidad.DoesNotExist:
+            messages.error(request, 'Especialidad no encontrada.')
+            return redirect('listarDoctor')
+
+        if len(id_doctor) < 2 or len(id_doctor) > 12:
+            messages.error(request, 'Id Inválido.')
+            return redirect('listarDoctor')   
+
+        if len(nombre_doctor) > 100 or len(titulo) > 100:
+            messages.error(request, 'Nombre, título del profesional, y especialidad no deben exceder los 100 caracteres.')
+            return redirect('listarDoctor')
+
+        if not validar_nombreDoctor(nombre_doctor):
+            messages.error(request, "Nombre incorrecto")
+            return redirect('listarDoctor') 
+
+        doc = Doctor(id_doctor=id_doctor, nombre_doctor=nombre_doctor, titulo=titulo,id_especialidad=id_especialidad, 
+                    correo=correo, foto=foto)
+        doc.save()
+        messages.success(request, 'Doctor Guardado')
         return redirect('listarDoctor')
-    
-    if validar_nombreapellido(nombre_doctor):
-        messages.success(request, 'Nombre Validado')
     else:
-        messages.error(request, "Nombre incorrecto")
-        return redirect('listarDoctor') 
+        return render(request, "medicos_nuevos.html")
 
-    # Validar que el nombre nombre, Título profesional y especialidad contengan solo letras y espacios
-    if not (nombre_doctor.replace(" ", "").isalpha()):
-        messages.error(request, 'Nombre solo deben contener letras y espacios.')
-        return redirect('listarDoctor')   
-    
-    doc = Doctor(id_doctor=id_doctor, nombre_doctor=nombre_doctor, titulo=titulo,id_especialidad=id_especialidad, 
-                correo=correo)
-    doc.save()
-    messages.success(request, 'Doctor Guardado')
-    return redirect('listarDoctor')
-
-def eliminar_doctor(request, id_doctor):
-    doctor = Doctor.objects.filter(pk=id_doctor)
+# Eliminar doctor
+def eliminarDoctor(request, id_doctor):
+    doctor = Doctor.objects.get(pk=id_doctor)
     doctor.delete()
     messages.success(request, 'Doctor eliminado')
     return redirect('listarDoctor')
 
-def detalle_doctor(request, id_doctor):
+# Actualizar doctor
+def actualizarDoctor(request, id_doctor):
     doctor = Doctor.objects.get(pk=id_doctor)
-    return render(request, "medicos_editar.html",{
-        'medico' : medico
-    })
+    if request.method == 'POST':
+        doctor.nombre_doctor = request.POST["nombre_doctor"]
+        doctor.titulo = request.POST["titulo"]
+        doctor.id_especialidad = request.POST["especialidad"]
+        doctor.correo = request.POST["correo_doctor"]
+        doctor.foto = request.FILES["foto"] if 'foto' in request.FILES else doctor.foto
+        doctor.save()
+        messages.success(request, 'Doctor actualizado')
+        return redirect('listarDoctor')
+    else:
+        return render(request, "medicos_actualizar.html",{
+            'doctor' : doctor
+        })
 
-def editar_doctor(request):
-    id_doctor = request.POST["id_doctor"]
-    nombre_doctor = request.POST["nombre_doctor"]
-    titulo_profesional = request.POST["titulo"]
-    id_especialidad = request.POS["especialidad"]
-    correo_doctor = request.POST["correo_doctor"]
-
-
+# Editar doctor
+def editar_doctor(request, id_doctor):
+    doctor = Doctor.objects.get(pk=id_doctor)
+    if request.method == 'POST':
+        doctor.nombre_doctor = request.POST["nombre_doctor"]
+        doctor.titulo = request.POST["titulo"]
+        doctor.id_especialidad = request.POST["especialidad"]
+        doctor.correo = request.POST["correo_doctor"]
+        doctor.foto = request.FILES["foto"] if 'foto' in request.FILES else doctor.foto
+        doctor.save()
+        messages.success(request, 'Doctor actualizado')
+        return redirect('listarDoctor')
+    else:
+        return render(request, "medicos_editar.html",{
+            'doctor' : doctor
+        })

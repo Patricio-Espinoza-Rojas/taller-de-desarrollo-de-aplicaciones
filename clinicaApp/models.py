@@ -10,19 +10,20 @@ class Paciente(models.Model):#tabla llamada paciente
     telefono_paciente = models.CharField(max_length=20)
     correo_paciente = models.CharField(max_length=150)
     
-class Doctor(models.Model):
-    
-    id_doctor = models.IntegerField()
-    nombre_doctor = models.CharField(max_length=150)
-    titulo = models.CharField(max_length=150)
-    id_especialidad = models.IntegerField() 
-    correo =  models.CharField(max_length=150)
-    id_agenda = models.IntegerField(default=0)  
-
 class Especialidad(models.Model):
     
     id_especialidad = models.IntegerField() 
     nombre_especialidad = models.CharField(max_length=150) 
+
+class Doctor(models.Model):
+    id_doctor = models.IntegerField(primary_key=True)
+    nombre_doctor = models.CharField(max_length=150)
+    titulo = models.CharField(max_length=150)
+    especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE, default=1)
+    correo = models.CharField(max_length=150)
+    id_agenda = models.IntegerField(default=0)
+    foto = models.ImageField(upload_to='doctores/', null=True, blank=True)  
+
     
 class Agenda(models.Model):
 
