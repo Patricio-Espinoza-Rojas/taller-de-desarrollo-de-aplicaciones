@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse 
 from clinicaApp.models import Paciente, Doctor, Especialidad, Agenda, FichaPaciente, Receta, Medicamentos, Tipousuario, Permiso
 from .forms import AgendaForm
-
+from django.contrib.auth.models import AbstractUser
 from django.contrib import messages
 import re
 
