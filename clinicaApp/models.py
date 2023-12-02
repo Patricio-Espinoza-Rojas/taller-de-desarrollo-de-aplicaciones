@@ -13,6 +13,9 @@ class Paciente(models.Model):#tabla llamada paciente
 class Especialidad(models.Model):
     id_especialidad = models.AutoField(primary_key=True)
     nombre_especialidad = models.CharField(max_length=255)
+    
+    def __str__(self):
+        return self.nombre_especialidad
 
 class Doctor(models.Model):
     id_doctor = models.AutoField(primary_key=True)
