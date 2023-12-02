@@ -22,7 +22,7 @@ def inicio(request):
         form = AgendaForm()
         doctores = Doctor.objects.all()
         especialidades = Especialidad.objects.all()
-        equipo = Doctor.objects.all()  # Cambia Medico por Doctor
+        equipo = Doctor.objects.all()  # Cambia Doctor por Doctor
         return render(request, 'inicio.html', {
         'form': form,
         'doctores': doctores,
@@ -35,7 +35,7 @@ def servicios(request):
     return render(request, 'servicios.html', {'servicios': servicios})
 
 def equipo(request):
-    equipo = Medico.objects.all()
+    equipo = Doctor.objects.all()
     return render(request, 'equipo.html', {'equipo': equipo})
 
 def testimonios(request):
@@ -238,12 +238,12 @@ def editar(request):
 def crearDoctor(request):
     especialidades = Especialidad.objects.all()
 
-    return render(request, "medicos_nuevos.html", {'lista_especialidades': especialidades})
+    return render(request, "doctores_nuevos.html", {'lista_especialidades': especialidades})
 
 # Listar doctores
 def listarDoctor(request):
-    medicos = Doctor.objects.all()  # Recuperar todos los médicos de la base de datos
-    return render(request, 'medicos_listar.html', {'medicos': medicos})  # Pasar los médicos a la plantilla
+    doctores = Doctor.objects.all()  # Recuperar todos los médicos de la base de datos
+    return render(request, 'doctores_listar.html', {'doctores': doctores})  # Pasar los médicos a la plantilla
 
 def validar_idInt(id_doctor):
     # Esta función verifica si el id_doctor solo contiene números
@@ -294,7 +294,7 @@ def guardarDoctor(request):
         # Obtener el valor de 'especialidad' directamente del QueryDict
         id_especialidad = request.POST.getlist("especialidad")
         form = especialidad(initial={'especialidad': id_especialidad}) 
-        return render(request, "medicos_nuevos.html", {'form': form, 'lista_especialidades': especialidades})
+        return render(request, "doctores_nuevos.html", {'form': form, 'lista_especialidades': especialidades})
 
 
 # Eliminar doctor
@@ -317,7 +317,7 @@ def actualizarDoctor(request, id_doctor):
         messages.success(request, 'Doctor actualizado')
         return redirect('listarDoctor')
     else:
-        return render(request, "medicos_actualizar.html",{
+        return render(request, "doctores_actualizar.html",{
             'doctor' : doctor
         })
 
@@ -334,7 +334,7 @@ def editar_doctor(request, id_doctor):
         messages.success(request, 'Doctor actualizado')
         return redirect('listarDoctor')
     else:
-        return render(request, "medicos_editar.html",{
+        return render(request, "doctores_editar.html",{
             'doctor' : doctor
         })
 

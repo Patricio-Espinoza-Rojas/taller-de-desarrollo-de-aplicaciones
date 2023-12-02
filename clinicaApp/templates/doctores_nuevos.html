@@ -6,11 +6,11 @@
             <div class="alert alert-success">{{message}}</div>
         {% endfor %}
     {% endif %}
-    <h1 class="text-center">Crear Médicos</h1>
+    <h1 class="text-center">Crear Doctor</h1>
 
     <form class="w-50 shadow mx-auto p-4 m-3" method="post" action="doctor/guardar" enctype="multipart/form-data">
         {% csrf_token %}
-        Id Médico: <input type="text" name="id_doctor" class="form-control my-2" required>
+        Id Doctor: <input type="text" name="id_doctor" class="form-control my-2" required>
         Nombre: <input type="text" name="nombre_doctor" class="form-control my-2" required>
         Foto: <input type="file" name="foto" class="form-control my-2">
         Título del Profesional: <input type="text" name="titulo" class="form-control my-2" required>

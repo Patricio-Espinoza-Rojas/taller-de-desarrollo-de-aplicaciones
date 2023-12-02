@@ -7,7 +7,7 @@
     {% endfor %}
 {% endif %}
 
-    <h1 class="text-center">Lista de Médicos</h1>
+    <h1 class="text-center">Lista de Doctores</h1>
 
     <table class="table table-ligth w-75 mx-auto text-center">
         <tr class="table-dark">
@@ -18,14 +18,14 @@
             <th>Correo</th>
             <th></th>
             <th></th>
-#ARREGLAR ID ESPECIALIDAD
-    {% for medico in medicos %}
+        <!--ARREGLAR ID ESPECIALIDAD-->
+    {% for doctor in doctores %}
         <tr>
-            <td>{{medico.id_doctor}}</td>
-            <td>{{medico.nombre_doctor}}</td>
-            <td>{{medico.titulo}}</td>
-            <td>{{medico.}}</td>
-            <td>{{medico.correo}}</td>
+            <td>{{doctor.id_doctor}}</td>
+            <td>{{doctor.nombre_doctor}}</td>
+            <td>{{doctor.titulo}}</td>
+            <td>{{doctor.}}</td>
+            <td>{{doctor.correo}}</td>
             <td> 
                 {% comment %} <form action="{% url 'eliminar_doctor' Doctor.id_doctor %}"
                  method="post">

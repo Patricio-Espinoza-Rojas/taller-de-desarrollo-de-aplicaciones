@@ -1,12 +1,12 @@
-{% extends 'medicos_actualizar.html' %}
+{% extends 'doctores_actualizar.html' %}
 
 {% block content %}
 
-    <h1 class="text-center">Editar medico</h1>    
+    <h1 class="text-center">Editar doctor</h1>    
 
     <form class="w-50 shadow mx-auto p-4 m-3" method="post" action="{% url 'editar_doctor' %}">
         {% csrf_token %}
-        id Médico: <input type="hidden" name=id value="{{Doctor.id_doctor}}">
+        id Doctor: <input type="hidden" name=id value="{{Doctor.id_doctor}}">
 
         Nombre: <input type="text" name="nombre" class="form-control my-2" required value="{{Doctor.nombre_doctor}}">
 
