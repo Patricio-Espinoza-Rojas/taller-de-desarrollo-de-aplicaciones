@@ -244,8 +244,8 @@ def crearDoctor(request):
 
     return render(request, "doctores_nuevos.html", {'lista_especialidades': especialidades})
 
-def detalleDoctor(request, id):
-    doctor = Doctor.objects.get(id)
+def detalleDoctor(request, id_doctor):
+    doctor = Doctor.objects.get(pk=id_doctor)
     return render(request, "doctores_editar.html", {
         'doctor': doctor
     })
@@ -339,7 +339,7 @@ def actualizarDoctor(request, id_doctor):
         })
 
 # Editar doctor
-def editar_doctor(request, id_doctor):
+def editarDoctor(request, id_doctor):
     doctor = Doctor.objects.get(pk=id_doctor)
     if request.method == 'POST':
         doctor.nombre_doctor = request.POST["nombre_doctor"]

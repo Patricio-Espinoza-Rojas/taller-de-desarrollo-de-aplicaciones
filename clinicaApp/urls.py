@@ -23,11 +23,12 @@ urlpatterns = [
     path('contacto/', views.contacto, name='contacto'),
     path('footer/', views.footer, name='footer'),
     path('Crear Doctores', views.crearDoctor, name='crearDoctor'),
-    path('Eliminar/Doctor/<int:id>', views.eliminarDoctor, name='eliminarDoctor'),
+    path('Eliminar/Doctor/<int:id_doctor>', views.eliminarDoctor, name='eliminarDoctor'),
     path('Listar/Doctor', views.listarDoctor, name='listarDoctor'),
     path('Actualizar Doctor', views.actualizarDoctor, name='actualizarDoctor'),
     path('Especialidad/listarespecialidad', views.listarespecialidad, name='listarespecialidad'),
-    path('doctor/detalle/<int:id>', views.detalleDoctor, name='detalle_doctor'),
+    path('doctor/detalle/<int:id_doctor>', views.detalleDoctor, name='detalle_doctor'),
+    path('doctores/editar', views.editarDoctor, name='editar_doctor'),
     path('doctor/guardar', views.guardarDoctor, name='guardar_doctor'),
 
 ]
