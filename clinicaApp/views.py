@@ -352,32 +352,43 @@ def actualizarDoctor(request, id_doctor):
         })
 
 # Editar doctor
-from django.shortcuts import get_object_or_404
-
 def editarDoctor(request, id_doctor):
-    try:
-        doctor = Doctor.objects.get(pk=id_doctor)
+    doctor = get_object_or_404(Doctor, id_doctor=id_doctor)
 
-        if request.method == 'POST':
-            doctor.nombre_doctor = request.POST["nombre_doctor"]
-            doctor.titulo = request.POST["titulo"]
-            doctor.id_especialidad = request.POST["especialidad"]
-            doctor.correo = request.POST["correo_doctor"]
-            
-            # Manejo de la foto, asegúrate de que request.FILES esté presente
-            doctor.foto = request.FILES["foto"] if 'foto' in request.FILES else doctor.foto
-            
+    if request.method == 'POST':
+        # Procesar los datos del formulario
+        try:
+            id_doctor_form = request.POST["id_doctor"]
+            nombre_doctor = request.POST["nombre_doctor"]
+            titulo = request.POST["titulo"]
+            id_especialidad = request.POST["especialidad"]
+            correo = request.POST["correo_doctor"]
+            foto = request.FILES["foto"] if 'foto' in request.FILES else None
+
+            doctor.id_doctor = id_doctor_form
+            doctor.nombre_doctor = nombre_doctor
+            doctor.titulo = titulo
+            doctor.id_especialidad = id_especialidad
+            doctor.correo = correo
+
+            if foto:
+                doctor.foto = foto
+
             doctor.save()
-            messages.success(request, 'Doctor actualizado')
-            return redirect('listarDoctor')
-        else:
-            return render(request, "doctores_editar.html", {'doctor': doctor})
-    except Doctor.DoesNotExist:
-        messages.error(request, 'Doctor no encontrado')
+
+            messages.success(request, 'Doctor Actualizado')
+
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
+
         return redirect('listarDoctor')
-    except Exception as e:
-        messages.error(request, f'Error al actualizar doctor: {e}')
-        return redirect('listarDoctor')
+
+    else:
+        # Renderizar el formulario con los datos del doctor
+        return render(request, "doctores_actualizar.html", {'doctor': doctor})
+
+
+
 
 
 ###ESPECIALIDAD

@@ -17,11 +17,8 @@ urlpatterns = [
     path('pacientes/editar', views.editar, name='editar'),
     path('inicio sesion', views.inicioSesion, name='inicioSesion'),
     path('inicio/', views.inicio, name='inicio'),
-<<<<<<< HEAD
     # path('agendar cita/', views.agendarCita, name='agendarCita'),
-=======
     path('Agendar Cita/', views.agendarCita, name='agendarCita'),
->>>>>>> 05338a2a8f5de867bb13143d2cc73db082d0ce93
     path('nosotros/', views.nosotros, name='nosotros'),
     path('servicios/', views.servicios, name='servicios'),
     path('equipo/', views.equipo, name='equipo'),
@@ -34,7 +31,7 @@ urlpatterns = [
     path('Actualizar Doctor', views.actualizarDoctor, name='actualizarDoctor'),
     path('Especialidad/listarespecialidad', views.listarespecialidad, name='listarespecialidad'),
     path('doctor/detalle/<int:id_doctor>', views.detalleDoctor, name='detalle_doctor'),
-    path('doctores/editar', views.editarDoctor, name='editar_doctor'),
+    path('doctores/editar/<int:id_doctor>', views.editarDoctor, name='editarDoctor'),
     path('doctor/guardar', views.guardarDoctor, name='guardar_doctor'),
 
 ]
