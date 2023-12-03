@@ -17,7 +17,11 @@ urlpatterns = [
     path('pacientes/editar', views.editar, name='editar'),
     path('inicio sesion', views.inicioSesion, name='inicioSesion'),
     path('inicio/', views.inicio, name='inicio'),
+<<<<<<< HEAD
     # path('agendar cita/', views.agendarCita, name='agendarCita'),
+=======
+    path('Agendar Cita/', views.agendarCita, name='agendarCita'),
+>>>>>>> 05338a2a8f5de867bb13143d2cc73db082d0ce93
     path('nosotros/', views.nosotros, name='nosotros'),
     path('servicios/', views.servicios, name='servicios'),
     path('equipo/', views.equipo, name='equipo'),

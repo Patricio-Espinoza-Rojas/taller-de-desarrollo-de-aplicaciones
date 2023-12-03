@@ -16,24 +16,6 @@
     </div>
   </div>
 
- <!-- Sección Agendar cita -->
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-3 shadow">
-      <h2 class="text-center text-primary py-4">Agendar cita</h2>
-      <form method="post" class="needs-validation mt-4 p-5 m-4" novalidate>
-        {% csrf_token %}
-        <div class="form-group">
-          {{ form.as_p }}
-        </div>
-        <div class="d-grid gap-2">
-          <button type="submit" class="btn btn-primary">Agendar cita</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
   <!-- Sección Nuestros servicios -->
   <div class="container mt-5">
     <h2 class="text-center text-secondary">Nuestros servicios</h2>

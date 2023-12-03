@@ -70,12 +70,12 @@ def about(request):
 #********************************************************************************************************
 #********************************************************************************************************
 
-def agendar_cita(request):
+def agendarCita(request):
     if request.method == 'POST':
         form = AgendaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('inicio')
+            return redirect('clinica')
     else:
         form = AgendaForm()
     return render(request, 'agendar_cita.html', {'form': form})
