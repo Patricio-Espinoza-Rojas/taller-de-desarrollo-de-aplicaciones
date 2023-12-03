@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse 
-from clinicaApp.models import Paciente, Doctor, Especialidad, Agenda, FichaPaciente, Receta, Medicamentos, Tipousuario, Permiso
-from .forms import AgendaForm
+from django.template.loader import get_template
+from django.template.loader import get_template
+from django_xhtml2pdf.utils import generate_pdf 
 from django.contrib.auth.models import AbstractUser
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse 
+from clinicaApp.models import Paciente, Doctor, Especialidad, Agenda, FichaPaciente, Receta, Medicamentos, Tipousuario, Permiso
+from .forms import AgendaForm
+from .forms import RecetaForm
 import re
+
 
 # Create your views here.
 #///////////////////// GENERALIDADES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -59,11 +64,9 @@ def inicioSesion(request):
     return render(request, "login.html")
 
 def about(request):
-    return HttpResponse('About')    
-
+    return HttpResponse('About')
 
 #MODULOS FUNCIONES PARA VISTA INICIO
-
 #*********************************************************************************************************
 #*********************************************************************************************************
 #///////////////////// VISTA INICIO, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -81,7 +84,6 @@ def agendarCita(request):
     return render(request, 'agendar_cita.html', {'form': form})
 
 #MODULOS FUNCIONES PARA PACIENTE
-
 #*********************************************************************************************************
 #*********************************************************************************************************
 #///////////////////// PACIENTES, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -170,7 +172,6 @@ def guardar(request):
         return redirect('listarPaciente')   
 
     tipousuario_fk = get_object_or_404(Tipousuario, id_tipousuario=1)
-
     pa = Paciente(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
                     correo_paciente=correo, tipousuario=tipousuario_fk)
     pa.save()
@@ -192,8 +193,6 @@ def detalle(request, rut_paciente):
     return render(request, "paciente_editar.html", {
         'paciente': paciente
     })
-
-
 
 def editar(request):
     try:
@@ -242,19 +241,18 @@ def editar(request):
         messages.success(request, 'Paciente Actualizado')
     except Exception as e:
             messages.error(request, f'Error: {e}')
-
+            
     return redirect('listarPaciente')
 
-
+#MÓDULOS DOCTORES
 #*********************************************************************************************************
 #*********************************************************************************************************
-#///////////////////// MÉDICOS, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#///////////////////// DOCTORES, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #********************************************************************************************************
 #********************************************************************************************************
 
 def crearDoctor(request):
     especialidades = Especialidad.objects.all()
-
     return render(request, "doctores_nuevos.html", {'lista_especialidades': especialidades})
 
 def detalleDoctor(request, id_doctor):
@@ -277,11 +275,8 @@ def validar_nombreDoctor(nombre_doctor):
     pattern = re.compile(r'^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')
     return bool(pattern.match(nombre_doctor))
 
-
-
 def guardarDoctor(request):
-    especialidades = Especialidad.objects.all()
-    
+    especialidades = Especialidad.objects.all()    
 
     if request.method == 'POST':
         nombre_doctor = request.POST.get("nombre_doctor")
@@ -325,7 +320,6 @@ def guardarDoctor(request):
         form = especialidad(initial={'especialidad': id_especialidad}) 
         return render(request, "doctores_nuevos.html", {'form': form, 'lista_especialidades': especialidades})
 
-
 # Eliminar doctor
 def eliminarDoctor(request, id_doctor):
     doctor = Doctor.objects.get(pk=id_doctor)
@@ -342,7 +336,6 @@ def actualizarDoctor(request, id_doctor):
         doctor.id_especialidad = request.POST["especialidad"]
         doctor.correo = request.POST["correo_doctor"]
         doctor.foto = request.FILES["foto"] if 'foto' in request.FILES else doctor.foto
-
         doctor.save()
         messages.success(request, 'Doctor actualizado')
         return redirect('listarDoctor')
@@ -356,7 +349,6 @@ def editarDoctor(request, id_doctor):
     doctor = get_object_or_404(Doctor, id_doctor=id_doctor)
 
     if request.method == 'POST':
-        # Procesar los datos del formulario
         try:
             id_doctor_form = request.POST["id_doctor"]
             nombre_doctor = request.POST["nombre_doctor"]
@@ -375,25 +367,57 @@ def editarDoctor(request, id_doctor):
                 doctor.foto = foto
 
             doctor.save()
-
             messages.success(request, 'Doctor Actualizado')
 
         except Exception as e:
             messages.error(request, f'Error: {e}')
-
         return redirect('listarDoctor')
 
     else:
-        # Renderizar el formulario con los datos del doctor
         return render(request, "doctores_actualizar.html", {'doctor': doctor})
 
-
-
-
-
-###ESPECIALIDAD
+#MODULOS FUNCIONES PARA ESPECIALIDA
+#*********************************************************************************************************
+#*********************************************************************************************************
+#///////////////////// ESPECIALIDAD, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#********************************************************************************************************
+#********************************************************************************************************
+    
 def listarespecialidad(request):
     especialidades = Especialidad.objects.all() 
     return render(request, "especialidades_listar.html",{
         'especialidades' : especialidades
     })
+    
+#MODULOS FUNCIONES PARA RECETA
+#*********************************************************************************************************
+#*********************************************************************************************************
+#///////////////////// ESPECIALIDAD, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#********************************************************************************************************
+#********************************************************************************************************
+
+def crearReceta(request):
+    if request.method == 'POST':
+        form = RecetaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('receta_listar')  
+    else:
+        form = RecetaForm()
+    return render(request, 'receta_crear.html', {'form': form})
+
+def exportar_pdf(request, receta_id):
+    receta = Receta.objects.get(id=receta_id)
+    template_path = 'receta_pdf_template.html'
+    context = {'receta': receta}
+    # Cargar el template
+    template = get_template(template_path)
+    # Renderizar el template con el contexto
+    html = template.render(context)
+    # Generar el PDF
+    pdf = generate_pdf(html)
+    # Crear un objeto HttpResponse con el contenido del PDF
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="receta.pdf"'
+
+    return response

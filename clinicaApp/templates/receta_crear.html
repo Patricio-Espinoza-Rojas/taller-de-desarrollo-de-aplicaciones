@@ -1,0 +1,17 @@
+{% extends 'clinicaweb.html' %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+    <h1 class="text-center">Crear Receta</h1>
+
+    <form method="post" action="{% url 'crearReceta' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Receta</button>
+    </form>{% include 'footer.html' %}
+
+{% endblock %}

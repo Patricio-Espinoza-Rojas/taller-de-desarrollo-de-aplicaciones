@@ -46,7 +46,7 @@ class Paciente(models.Model):
     tipousuario = models.ForeignKey(Tipousuario, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return f"{self.rut_paciente} - {self.nombre_paciente}"
+        return f"{self.rut_paciente} - {self.nombre_paciente} -{self.direccion_paciente} - {self.telefono_paciente}"
 
 class Doctor(models.Model):
     id_doctor = models.AutoField(primary_key=True)
@@ -72,9 +72,12 @@ class FichaPaciente(models.Model):
 class Receta(models.Model):
     id_receta = models.AutoField(primary_key=True)
     fecha = models.DateTimeField()
+    sexo = models.CharField(max_length=20)
+    edad = models.CharField(max_length=20)
+    instrucciones = models.CharField(max_length=500)
     medicamentos = models.ForeignKey(Medicamentos, on_delete=models.CASCADE, default=1)
     rutPaciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, default=1)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return f"{self.rutPaciente} - {self.fecha} - {self.medicamentos} - {self.doctor}"
+        return f"{self.rutPaciente} - {self.fecha} - {self.medicamentos} - {self.doctor} - {self.instrucciones} - {self.sexo} - {self.edad}"

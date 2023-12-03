@@ -34,6 +34,8 @@ urlpatterns = [
     path('doctor/detalle/<int:id_doctor>', views.detalleDoctor, name='detalle_doctor'),
     path('doctores/editar/<int:id_doctor>', views.editarDoctor, name='editarDoctor'),
     path('doctor/guardar', views.guardarDoctor, name='guardar_doctor'),
+    path('receta/crear', views.crearReceta, name='crearReceta'),
+    path('exportar_a_pdf/<int:receta_id>/', views.exportar_pdf, name='exportar_pdf'),
 
 ]
 if settings.DEBUG:

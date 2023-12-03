@@ -55,5 +55,8 @@ https://getbootstrap.com/docs/5.3/components/navbar/
     ****crear en views, luego en urls, los html de las funciones y views 
     
     se deja sqlie con db browser    
+    
+    instalar pip install django-xhtml2pdf
+
 
 '''
