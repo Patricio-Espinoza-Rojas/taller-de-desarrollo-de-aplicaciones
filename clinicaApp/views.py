@@ -4,6 +4,7 @@ from clinicaApp.models import Paciente, Doctor, Especialidad, Agenda, FichaPacie
 from .forms import AgendaForm
 from django.contrib.auth.models import AbstractUser
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
 import re
 
 # Create your views here.
@@ -164,9 +165,11 @@ def guardar(request):
     if not (nombre.replace(" ", "").isalpha()):
         messages.error(request, 'Nombre solo deben contener letras y espacios.')
         return redirect('listarPaciente')   
-    
+
+    tipousuario_fk = get_object_or_404(Tipousuario, id_tipousuario=1)
+
     pa = Paciente(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
-                    correo_paciente=correo)
+                    correo_paciente=correo, tipousuario=tipousuario_fk)
     pa.save()
     messages.success(request, 'Paciente Guardado')
     return redirect('listarPaciente')
@@ -174,18 +177,19 @@ def guardar(request):
 #/////////VALIDACIONES EN EDITAR PACIENTE\\\\\\\\\\\\\\\\\\\\\\\\
 
 #Eliminar del listado con boton
-def eliminar(request, id):
-    paciente = Paciente.objects.filter(pk=id)
+def eliminar(request, rut_paciente):
+    paciente = Paciente.objects.get(rut_paciente=rut_paciente)
     paciente.delete()
     messages.success(request, 'Paciente eliminado')
     return redirect('listarPaciente')
 
 #listar para actualizar 
-def detalle(request, id):
-    paciente = Paciente.objects.get(pk=id)
-    return render(request, "paciente_editar.html",{
-        'paciente' : paciente
+def detalle(request, rut_paciente):
+    paciente = Paciente.objects.get(rut_paciente=rut_paciente)
+    return render(request, "paciente_editar.html", {
+        'paciente': paciente
     })
+
 
 
 def editar(request):
@@ -240,6 +244,12 @@ def crearDoctor(request):
 
     return render(request, "doctores_nuevos.html", {'lista_especialidades': especialidades})
 
+def detalleDoctor(request, id):
+    doctor = Doctor.objects.get(id)
+    return render(request, "doctores_editar.html", {
+        'doctor': doctor
+    })
+    
 # Listar doctores
 def listarDoctor(request):
     doctores = Doctor.objects.all()  # Recuperar todos los médicos de la base de datos
@@ -254,8 +264,11 @@ def validar_nombreDoctor(nombre_doctor):
     pattern = re.compile(r'^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')
     return bool(pattern.match(nombre_doctor))
 
+
+
 def guardarDoctor(request):
     especialidades = Especialidad.objects.all()
+    
 
     if request.method == 'POST':
         nombre_doctor = request.POST.get("nombre_doctor")
@@ -263,6 +276,8 @@ def guardarDoctor(request):
         id_especialidad = request.POST.get("especialidad")
         correo = request.POST.get("correo_doctor")
         foto = request.FILES.get("foto", None)
+        # id_agenda = request.POST.get("agenda")
+        # agenda = get_object_or_404(Agenda, id_agenda=id_agenda)
 
         if len(nombre_doctor) > 100 or len(titulo) > 100:
             messages.error(request, 'Nombre, título del profesional, y especialidad no deben exceder los 100 caracteres.')
@@ -285,6 +300,7 @@ def guardarDoctor(request):
             especialidad=especialidad,
             correo=correo,
             foto=foto
+            # agenda=agenda
         )
         doc.save()
         messages.success(request, 'Doctor Guardado')
@@ -313,6 +329,7 @@ def actualizarDoctor(request, id_doctor):
         doctor.id_especialidad = request.POST["especialidad"]
         doctor.correo = request.POST["correo_doctor"]
         doctor.foto = request.FILES["foto"] if 'foto' in request.FILES else doctor.foto
+
         doctor.save()
         messages.success(request, 'Doctor actualizado')
         return redirect('listarDoctor')
