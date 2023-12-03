@@ -17,6 +17,7 @@ urlpatterns = [
     path('pacientes/editar', views.editar, name='editar'),
     path('inicio sesion', views.inicioSesion, name='inicioSesion'),
     path('inicio/', views.inicio, name='inicio'),
+    # path('agendar cita/', views.agendarCita, name='agendarCita'),
     path('Agendar Cita/', views.agendarCita, name='agendarCita'),
     path('nosotros/', views.nosotros, name='nosotros'),
     path('servicios/', views.servicios, name='servicios'),
@@ -30,7 +31,7 @@ urlpatterns = [
     path('Actualizar Doctor', views.actualizarDoctor, name='actualizarDoctor'),
     path('Especialidad/listarespecialidad', views.listarespecialidad, name='listarespecialidad'),
     path('doctor/detalle/<int:id_doctor>', views.detalleDoctor, name='detalle_doctor'),
-    path('doctores/editar', views.editarDoctor, name='editar_doctor'),
+    path('doctores/editar/<int:id_doctor>', views.editarDoctor, name='editarDoctor'),
     path('doctor/guardar', views.guardarDoctor, name='guardar_doctor'),
 
 ]
