@@ -78,7 +78,7 @@ def agendarCita(request):
         form = AgendaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('clinica')
+            return redirect('agendarCita')
     else:
         form = AgendaForm()
     return render(request, 'agendar_cita.html', {'form': form})
