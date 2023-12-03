@@ -30,6 +30,9 @@ def inicio(request):
         'equipo': equipo,  # Ahora 'equipo' contiene los doctores
     })
 
+def nosotros(request):
+    return render(request, 'nosotros.html')
+
 def servicios(request):
     servicios = Servicio.objects.all()
     return render(request, 'servicios.html', {'servicios': servicios})

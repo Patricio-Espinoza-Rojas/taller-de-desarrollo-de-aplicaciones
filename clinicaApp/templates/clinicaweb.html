@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -31,85 +32,154 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            .hover-color:hover {
+  color: #f05f40 !important; /* Cambia este color al color que tiene "Reservar horas" */
+}
         }
+        .navbar-brand-img {
+  height: 50px; /* Ajusta este valor según el tamaño de tu navbar */
+  width: auto; /* Esto mantendrá la proporción de la imagen */
+}
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Clínica Kill Coronavirus</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
-            </li>
+    <header>
+      <div id="top-header">
+        <nav class="navbar bg-body-tertiary">
+          <div class="container-fluid">
+            <ul class="nav flex-column">
+              <a class="navbar-brand" href="#">Clínica kill coronavirus</a>
+              <div>
+              <a class="navbar-brand" href="#">mesa central 2 2222 2222</a>
+              <a class="navbar-brand" href="#">Reserva de horas 2 2222 2222</a>
+              </div>  
+            </ul>
+            <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+              <span class="btn btn-danger">Reservar Horas</span>
+            </button>
+            <div class="offcanvas offcanvas-end bg-body-tertiary" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Reserva tu hora</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Presencial</a>
+                  </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'crearPaciente' %}"
-                >Crear Paciente</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'listarPaciente' %}"
-                >Listar Pacientes</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'crearDoctor' %}"
-                >Crear Doctores</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'listarDoctor' %}"
-                >Listar Doctores</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'listarespecialidad' %}"
-                >Listar Especialidades</a
-              >
-            </li>
-
-            {% comment %} inicio de sesion {% endcomment %}
-            <div>
-            <form
-              class="d-flex"
-              role="search"
-              action="{% url 'inicioSesion' %}"
-              method="get"
-            ></form>
-            {% if user.is_authenticated %}
-            <a
-              class="btn btn-outline-primary ms-2"
-              href="{% url 'logout' %}"
-              role="button"
-              >Cerrar sesión</a
-            >
-            {% else %}
-            <a
-              class="btn btn-outline-primary ms-2"
-              href="{% url 'login' %}"
-              role="button"
-              >Iniciar sesión</a
-            >
-            {% endif %}
-
-          </ul>
-        </div>
+                  
+                  {% comment %} inicio
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Dropdown
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                      <li><a class="dropdown-item" href="#">Action</a></li>
+                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                  </li>
+                </ul>
+                <form class="d-flex mt-3" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-success" type="submit">Search</button>
+                </form>
+                {% endcomment %}
+              </div>
+            </div>
+          </div>
+        </nav>
       </div>
-    </nav>
+
+      <div id="botom-header">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'inicio' %} ">
+              <img src="{% static 'img/logo_clinica_nav.png' %}" class="navbar-brand-img rounded-circle" alt="Logo"></a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                {% comment %} inicio 
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
+                </li>
+                {% endcomment %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'nosotros' %}">Nosotros</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'crearPaciente' %}"
+                    >Crear Paciente</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'listarPaciente' %}"
+                    >Listar Pacientes</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'crearDoctor' %}"
+                    >Crear Doctores</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'listarDoctor' %}"
+                    >Listar Doctores</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'listarespecialidad' %}"
+                    >Listar Especialidades</a
+                  >
+                </li>
+
+                {% comment %} inicio de sesion {% endcomment %}
+                <div>
+                <form
+                  class="d-flex"
+                  role="search"
+                  action="{% url 'inicioSesion' %}"
+                  method="get"
+                ></form>
+                {% if user.is_authenticated %}
+                <a
+                  class="btn btn-outline-primary ms-2"
+                  href="{% url 'logout' %}"
+                  role="button"
+                  >Cerrar sesión</a
+                >
+                {% else %}
+                <a
+                  class="btn btn-outline-primary ms-2"
+                  href="{% url 'login' %}"
+                  role="button"
+                  >Iniciar sesión</a
+                >
+                {% endif %}
+
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
     {% comment %}
     <script src="" async defer></script>
     {% endcomment %} 
