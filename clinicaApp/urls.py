@@ -2,10 +2,11 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static 
+from django.views.generic import RedirectView
 
 
 urlpatterns = [
-    path('', views.clinicaKill, name='clinica'),
+    path('', RedirectView.as_view(url='/inicio/')),   
     path('about/', views.about),  
     path('Crear Paciente', views.crearPaciente, name='crearPaciente'),
     path('Eliminar Paciente', views.eliminarPaciente, name='eliminarPaciente'),
