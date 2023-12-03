@@ -196,43 +196,53 @@ def detalle(request, rut_paciente):
 
 
 def editar(request):
-    rut = request.POST["rut"]
-    nombre = request.POST["nombre"]
-    direccion = request.POST["direccion"]
-    telefono = request.POST["telefono"]
-    correo = request.POST["correo"]
-    id = request.POST["id"]
+    try:
+        rut = request.POST["rut"]
+        nombre = request.POST["nombre"]
+        direccion = request.POST["direccion"]
+        telefono = request.POST["telefono"]
+        correo = request.POST["correo"]
+        rut_paciente = request.POST["rut"]    
+        # if validar_rutstring(rut):
+        #     messages.success(request,'Rut Validado sin letras')        
+        # else:
+        #     messages.error(request,"No se admiten letras en Rut")
+        #     return redirect('listarPaciente')
+        
+        # Validar longitud máxima para el RUT
+        if len(rut) < 2 or len(rut) > 12:
+            messages.error(request, 'Rut Inválido.')
+            return redirect('listarPaciente')   
     
-    # if validar_rutstring(rut):
-    #     messages.success(request,'Rut Validado sin letras')        
-    # else:
-    #     messages.error(request,"No se admiten letras en Rut")
-    #     return redirect('listarPaciente')
-    
-    # Validar longitud máxima para el RUT
-    if len(rut) < 2 or len(rut) > 12:
-        messages.error(request, 'Rut Inválido.')
-        return redirect('listarPaciente')   
- 
-    # Validar longitud máxima para nombre y dirección
-    if len(nombre) > 100 or len(direccion) > 100:
-        messages.error(request, 'Nombre y dirección no deben exceder los 100 caracteres.')
-        return redirect('listarPaciente')
-    
-    if validar_nombreapellido(nombre):
-        messages.success(request, 'Nombre Validado')
-    else:
-        messages.error(request, "Nombre incorrecto")
-        return redirect('listarPaciente') 
+        # Validar longitud máxima para nombre y dirección
+        if len(nombre) > 100 or len(direccion) > 100:
+            messages.error(request, 'Nombre y dirección no deben exceder los 100 caracteres.')
+            return redirect('listarPaciente')
+        
+        if validar_nombreapellido(nombre):
+            messages.success(request, 'Nombre Validado')
+        else:
+            messages.error(request, "Nombre incorrecto")
+            return redirect('listarPaciente') 
 
-    # Validar que el nombre y la dirección contengan solo letras y espacios
-    if not (nombre.replace(" ", "").isalpha()):
-        messages.error(request, 'Nombre solo deben contener letras y espacios.')
-        return redirect('listarPaciente')   
-    
-    Paciente.objects.filter(pk=id).update(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
-                    correo_paciente=correo)
-    messages.success(request, 'Paciente Actualizado')
+        # Validar que el nombre y la dirección contengan solo letras y espacios
+        if not (nombre.replace(" ", "").isalpha()):
+            messages.error(request, 'Nombre solo deben contener letras y espacios.')
+            return redirect('listarPaciente')  
+        
+        paciente = get_object_or_404(Paciente, rut_paciente=rut_paciente)
+        paciente.rut_paciente = rut
+        paciente.rut_paciente = rut
+        paciente.nombre_paciente = nombre
+        paciente.direccion_paciente = direccion
+        paciente.telefono_paciente = telefono
+        paciente.correo_paciente = correo
+        paciente.save()
+
+        messages.success(request, 'Paciente Actualizado')
+    except Exception as e:
+            messages.error(request, f'Error: {e}')
+
     return redirect('listarPaciente')
 
 
@@ -342,21 +352,32 @@ def actualizarDoctor(request, id_doctor):
         })
 
 # Editar doctor
+from django.shortcuts import get_object_or_404
+
 def editarDoctor(request, id_doctor):
-    doctor = Doctor.objects.get(pk=id_doctor)
-    if request.method == 'POST':
-        doctor.nombre_doctor = request.POST["nombre_doctor"]
-        doctor.titulo = request.POST["titulo"]
-        doctor.id_especialidad = request.POST["especialidad"]
-        doctor.correo = request.POST["correo_doctor"]
-        doctor.foto = request.FILES["foto"] if 'foto' in request.FILES else doctor.foto
-        doctor.save()
-        messages.success(request, 'Doctor actualizado')
+    try:
+        doctor = Doctor.objects.get(pk=id_doctor)
+
+        if request.method == 'POST':
+            doctor.nombre_doctor = request.POST["nombre_doctor"]
+            doctor.titulo = request.POST["titulo"]
+            doctor.id_especialidad = request.POST["especialidad"]
+            doctor.correo = request.POST["correo_doctor"]
+            
+            # Manejo de la foto, asegúrate de que request.FILES esté presente
+            doctor.foto = request.FILES["foto"] if 'foto' in request.FILES else doctor.foto
+            
+            doctor.save()
+            messages.success(request, 'Doctor actualizado')
+            return redirect('listarDoctor')
+        else:
+            return render(request, "doctores_editar.html", {'doctor': doctor})
+    except Doctor.DoesNotExist:
+        messages.error(request, 'Doctor no encontrado')
         return redirect('listarDoctor')
-    else:
-        return render(request, "doctores_editar.html",{
-            'doctor' : doctor
-        })
+    except Exception as e:
+        messages.error(request, f'Error al actualizar doctor: {e}')
+        return redirect('listarDoctor')
 
 
 ###ESPECIALIDAD
