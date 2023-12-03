@@ -33,13 +33,13 @@
             flex-direction: column;
             min-height: 100vh;
             .hover-color:hover {
-  color: #f05f40 !important; /* Cambia este color al color que tiene "Reservar horas" */
-}
-        }
-        .navbar-brand-img {
-  height: 50px; /* Ajusta este valor según el tamaño de tu navbar */
-  width: auto; /* Esto mantendrá la proporción de la imagen */
-}
+              color: #f05f40 !important; /* Cambia este color al color que tiene "Reservar horas" */
+            }
+                    }
+                    .navbar-brand-img {
+              height: 50px; /* Ajusta este valor según el tamaño de tu navbar */
+              width: auto; /* Esto mantendrá la proporción de la imagen */
+            }
     </style>
   </head>
   <body>
@@ -50,15 +50,40 @@
         <nav class="navbar bg-body-tertiary">
           <div class="container-fluid">
             <ul class="nav flex-column">
-              <a class="navbar-brand" href="#">Clínica kill coronavirus</a>
+              <a class="navbar-brand fs-5" href="#">Clínica kill coronavirus</a>
               <div>
-              <a class="navbar-brand" href="#">mesa central 2 2222 2222</a>
-              <a class="navbar-brand" href="#">Reserva de horas 2 2222 2222</a>
+              <a class="navbar-brand fs-6" href="#">mesa central 2 2222 2222</a>
+              <a class="navbar-brand fs-6" href="#">Reserva de horas 2 2222 2222</a>
               </div>  
             </ul>
+             <!-- Sección Agendar cita -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Agenda tu hora</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form method="post" class="needs-validation mt-4 p-5 m-4" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                        {{ form.as_p }}
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                      <button type="submit" class="btn btn-primary">Agendar cita</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
               <span class="btn btn-danger">Reservar Horas</span>
             </button>
+
             <div class="offcanvas offcanvas-end bg-body-tertiary" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
               <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Reserva tu hora</h5>
@@ -67,10 +92,10 @@
               <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{url 'agendarCita'}">Presencial</a>
+                    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Presencial</button>
                   </li>
 
-
+                
                   {% comment %} inicio
                   <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
@@ -101,7 +126,7 @@
       </div>
 
       {% comment %} segundo nav {% endcomment %}
-      
+
       <div id="botom-header">
         <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
           <div class="container-fluid">
