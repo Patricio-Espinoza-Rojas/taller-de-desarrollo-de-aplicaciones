@@ -12,8 +12,8 @@ urlpatterns = [
     path('Listar Paciente', views.listarPaciente, name='listarPaciente'),
     path('Actualizar Paciente', views.actualizarPaciente, name='actualizarPaciente'),
     path('pacientes/guardar', views.guardar, name='guardar'),
-    path('pacientes/eliminar/<int:id>', views.eliminar, name='eliminar'),
-    path('pacientes/detalle/<int:id>', views.detalle, name='detalle'),
+    path('pacientes/eliminar/<str:rut_paciente>', views.eliminar, name='eliminar'),
+    path('pacientes/detalle/<str:rut_paciente>', views.detalle, name='detalle'),
     path('pacientes/editar', views.editar, name='editar'),
     path('inicio sesion', views.inicioSesion, name='inicioSesion'),
     path('inicio/', views.inicio, name='inicio'),
@@ -24,11 +24,13 @@ urlpatterns = [
     path('contacto/', views.contacto, name='contacto'),
     path('footer/', views.footer, name='footer'),
     path('Crear Doctores', views.crearDoctor, name='crearDoctor'),
-    path('Eliminar Doctor', views.eliminarDoctor, name='eliminarDoctor'),
-    path('Listar Doctor', views.listarDoctor, name='listarDoctor'),
+    path('Eliminar/Doctor/<int:id>', views.eliminarDoctor, name='eliminarDoctor'),
+    path('Listar/Doctor', views.listarDoctor, name='listarDoctor'),
     path('Actualizar Doctor', views.actualizarDoctor, name='actualizarDoctor'),
-    path('doctor/guardar', views.guardarDoctor, name='guardar_doctor'),
     path('Especialidad/listarespecialidad', views.listarespecialidad, name='listarespecialidad'),
+    path('doctor/detalle/<int:id>', views.detalleDoctor, name='detalle_doctor'),
+    path('doctor/guardar', views.guardarDoctor, name='guardar_doctor'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

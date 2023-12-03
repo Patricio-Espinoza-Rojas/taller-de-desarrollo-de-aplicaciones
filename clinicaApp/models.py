@@ -54,9 +54,8 @@ class Doctor(models.Model):
     titulo = models.CharField(max_length=150)
     especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE, default=1)
     correo = models.CharField(max_length=150)
-    agenda = models.ForeignKey(Agenda, on_delete=models.CASCADE, default=1)
     foto = models.ImageField(upload_to='doctores/', null=True, blank=True)
-    tipousuario = models.ForeignKey(Tipousuario, on_delete=models.CASCADE, default=1)
+    tipousuario = models.ForeignKey(Tipousuario, on_delete=models.CASCADE, default=2)
     
     def __str__(self):
         return f"{self.nombre_doctor} - {self.especialidad} - {self.agenda}"
@@ -68,7 +67,6 @@ class FichaPaciente(models.Model):
     fecha = models.DateTimeField()
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, default=1)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, default=1)
-    especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE, default=1)
     receta = models.ForeignKey('Receta', on_delete=models.CASCADE, default=1)
 
 class Receta(models.Model):

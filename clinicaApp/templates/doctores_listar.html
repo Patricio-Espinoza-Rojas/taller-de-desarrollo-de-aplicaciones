@@ -11,8 +11,8 @@
 
     <table class="table table-ligth w-75 mx-auto text-center">
         <tr class="table-dark">
-            <th>Id Médico</th>
-            <th>Nombre Médico</th>
+            <th>Id Doctor</th>
+            <th>Nombre Doctor</th>
             <th>Título del Profesional</th>
             <th>Especialidad del profesional</th>
             <th>Correo</th>
@@ -27,8 +27,7 @@
             <td>{{doctor.especialidad}}</td>
             <td>{{doctor.correo}}</td>
             <td> 
-                {% comment %} <form action="{% url 'eliminar_doctor' Doctor.id_doctor %}"
-                 method="post">
+                <form action="{% url 'eliminarDoctor' doctor.id_doctor %}" method="post">
                     {% csrf_token %}
                     <button class="btn btn-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">
                         <i class="fa fa-trash"></i>
@@ -36,14 +35,14 @@
                 </form>
             </td> 
             <td>               
-                <form action="{% url 'detalle_doctor' Doctor.id_doctor %}"
+                <form action="{% url 'detalle_doctor' doctor.id_doctor %}"
                     method="post">
                     {% csrf_token %}
                     <button class="btn btn-warning" title="Editar">
                         <i class="fa fa-edit"></i>
                     </button>
                 </form>
-            </td>  {% endcomment %}
+            </td> 
         </tr>   
     {% endfor %}
     </table>
