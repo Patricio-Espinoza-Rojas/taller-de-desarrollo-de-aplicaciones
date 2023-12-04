@@ -1,0 +1,26 @@
+{% extends 'clinicaweb.html' %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="exportar_pdf" content="width=device-width, initial-scale=1.0">
+        <title>Receta </title>
+    </head>
+    <body>
+        <h1>Receta Médica</h1>
+        <p><strong>Fecha:</strong> {{ receta.fecha }}</p>
+        <p><strong>Rut del Paciente:</strong> {{ receta.rutPaciente.rut_paciente }}</p>
+        <p><strong>Nombre del Paciente:</strong> {{ receta.rutPaciente.nombre_paciente }}</p>
+        <p><strong>Medicamentos:</strong> {{ receta.medicamentos.nombre_medicamento }}</p>
+        <p><strong>Instrucciones:</strong> {{ receta.instrucciones }}</p>
+    </body>
+    </html>
+
+    {% include 'footer.html' %}
+{% endblock %}

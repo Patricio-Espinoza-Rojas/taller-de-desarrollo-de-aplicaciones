@@ -400,32 +400,41 @@ def listarespecialidad(request):
 #MODULOS FUNCIONES PARA RECETA
 #*********************************************************************************************************
 #*********************************************************************************************************
-#///////////////////// ESPECIALIDAD, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#///////////////////// RECETA, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #********************************************************************************************************
 #********************************************************************************************************
+
+from django.db import IntegrityError
 
 def crearReceta(request):
     if request.method == 'POST':
         form = RecetaForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('receta_listar')  
+            try:
+                form.save()
+                return redirect('receta_listar')
+            except IntegrityError as e:
+                # Imprime el error específico para obtener más información.
+                print(e)
+                messages.error(request, 'Error al guardar la receta. Verifica las claves foráneas.')
+        # Si el formulario no es válido, también puedes imprimir los errores.
+        else:
+            print(form.errors)
     else:
         form = RecetaForm()
     return render(request, 'receta_crear.html', {'form': form})
 
-def exportar_pdf(request, receta_id):
-    receta = Receta.objects.get(id=receta_id)
-    template_path = 'receta_pdf_template.html'
+def recetaListar(request):
+    recetas = Receta.objects.all()
+    return render(request, 'receta_listar.html', {'recetas': recetas})
+
+def exportar_pdf(request, id_receta):
+    receta = Receta.objects.get(id_receta=id_receta)
+    template_path = 'receta_pdf.html'
     context = {'receta': receta}
-    # Cargar el template
     template = get_template(template_path)
-    # Renderizar el template con el contexto
     html = template.render(context)
-    # Generar el PDF
     pdf = generate_pdf(html)
-    # Crear un objeto HttpResponse con el contenido del PDF
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = 'filename="receta.pdf"'
-
     return response
