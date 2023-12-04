@@ -7,9 +7,9 @@
     {% endfor %}
 {% endif %}
 
-    <h1 class="text-center">Lista de Doctores</h1>
+    <h1 class="text-center mt-5">Lista de Doctores</h1>
 
-    <table class="table table-ligth w-75 mx-auto text-center">
+    <table class="table table-ligth w-75 mx-auto mt-2 mb-5 text-center">
         <tr class="table-dark">
             <th>Id Doctor</th>
             <th>Nombre Doctor</th>
@@ -43,6 +43,10 @@
                     </button>
                 </form>
             </td> 
+        </tr>
+    {% empty %}
+        <tr>
+          <td colspan="5" class="text-center">No hay doctores registrados.</td>
         </tr>   
     {% endfor %}
     </table>

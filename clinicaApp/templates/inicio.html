@@ -2,7 +2,7 @@
 {% block content %}
 {% load static %}
 <!-- Carrusel -->
-<div id="carouselContainner" class="carousel slide mx-auto m-4 shadow" style="width: 50%;" data-ride="carousel" data-interval="50"  data-bs-ride="carousel">
+<div id="carouselContainner" class="carousel slide mx-auto mt-5 shadow" style="width: 50%;" data-ride="carousel" data-interval="50"  data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img src="{% static 'img/medicina-1.jpg' %}" class="d-block w-100" alt="Imagen 1">
@@ -18,7 +18,7 @@
 
   <!-- Sección Nuestros servicios -->
   <div class="container mt-5">
-    <h2 class="text-center text-secondary">Nuestros servicios</h2>
+    <h2 class="text-center">Nuestros servicios</h2>
     <div class="row">
       {% for servicio in servicios %}
       <div class="col-md-4">
@@ -42,7 +42,7 @@
 <!-- Sección  equipo medico -->
 
 <div class="container mt-5">
-  <h2>Nuestro equipo</h2>
+  <h2 class="text-center">Nuestro equipo</h2>
   <div class="row">
       {% for Doctor in equipo %}
       <div class="col-md-4">
@@ -58,6 +58,10 @@
                   <p class="card-text">{{ Doctor.especialidad }}</p>
               </div>
           </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center">No hay Funcionarios disponibles en este momento.</p>
       </div>
       {% endfor %}
   </div>
@@ -75,9 +79,28 @@
 </div>
 
 <!-- Sección de contacto -->
-<div class="container mt-5">
+<div class="container my-5 text-center rounded shadow">
   <h2>Contacto</h2>
-  <!-- ... tu formulario de contacto aquí ... -->
+  <form method="post" class="bg-light p-5 mb-4 rounded">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="nombre">Nombre</label>
+      <input type="text" class="form-control" id="nombre" name="nombre" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Correo Electrónico</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="telefono">Teléfono</label>
+      <input type="tel" class="form-control" id="telefono" name="telefono" required>
+    </div>
+    <div class="form-group">
+      <label for="mensaje">Mensaje</label>
+      <textarea class="form-control" id="mensaje" name="mensaje" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3 px-5">Enviar</button>
+  </form>
 </div>
 
 {% include 'footer.html' %}

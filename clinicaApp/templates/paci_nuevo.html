@@ -6,9 +6,9 @@
             <div class="alert alert-success">{{message}}</div>
         {% endfor %}
     {% endif %}
-    <h1 class="text-center">Crear Paciente</h1>
+    <h1 class="text-center mt-5">Crear Paciente</h1>
 
-    <form class="w-50 shadow mx-auto p-4 m-3" method="post" action="pacientes/guardar">
+    <form class="w-50 shadow mx-auto p-4 mt-2 mb-5 rounded" method="post" action="pacientes/guardar">
         {% csrf_token %}
         Rut:<h10> Con Puntos y con Guión</h10> <input type="text" name="rut" class="form-control my-2" required>
         
@@ -22,7 +22,7 @@
 
         Correo: <input type="text" name="correo" class="form-control my-2" required>
 
-        <input type="submit"value="Guardar" class="btn btn-primary">
+        <input type="submit"value="Guardar" class="btn btn-primary mt-3">
 
 
     </form>

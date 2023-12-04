@@ -7,9 +7,9 @@
     {% endfor %}
 {% endif %}
 
-    <h1 class="text-center">Lista de Especialidades</h1>
+    <h1 class="text-center mt-5">Lista de Especialidades</h1>
 
-    <table class="table table-ligth w-75 mx-auto text-center">
+    <table class="table table-ligth w-75 mx-auto mt-2 mb-5 text-center">
         <tr class="table-dark">
             <th>Id Especialidad</th>
             <th>Nombre Especialidad</th>
@@ -38,6 +38,10 @@
                     </button> {% endcomment %}
                 {% comment %} </form> {% endcomment %}
             </td> 
+        </tr>
+    {% empty %}
+        <tr>
+          <td colspan="7" class="text-center">No hay especialidades registradas.</td>
         </tr>   
     {% endfor %}
     </table>
