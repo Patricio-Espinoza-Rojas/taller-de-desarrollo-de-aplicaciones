@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.views.generic.edit import CreateView
 from django.template.loader import get_template
 from django.template.loader import get_template
 from django_xhtml2pdf.utils import generate_pdf 
@@ -89,6 +90,13 @@ def agendarCita(request):
 #///////////////////// PACIENTES, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #********************************************************************************************************
 #********************************************************************************************************
+
+def crearFichaPaciente(request):
+    return render(request, "fichaPaciente_crear.html")
+
+def listarFichaPaciente(request):
+    return render(request, "fichaPaciente_listar.html")
+
 
 def crearPaciente(request):
     return render(request, "paci_nuevo.html")

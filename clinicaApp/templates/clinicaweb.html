@@ -34,13 +34,17 @@
             flex-direction: column;
             min-height: 100vh;
             .hover-color:hover {
-              color: #f05f40 !important; /* Cambia este color al color que tiene "Reservar horas" */
-            }
-                    }
-                    .navbar-brand-img {
-              height: 50px; /* Ajusta este valor según el tamaño del navbar */
-              width: auto; /* Esto mantendrá la proporción de la imagen */
-            }
+              color: #f05f40 !important; /* Cambia este color al color que tiene "Reservar horas" */}}
+            
+            .navbar-brand-img {
+            height: 50px; /* Ajusta este valor según el tamaño del navbar */
+            width: auto; /* Esto mantendrá la proporción de la imagen */}
+            
+            .flex-column-nav {
+            flex-direction: column;}
+
+            .login-button {
+              align-self: flex-end}
     </style>
   </head>
   <body>
@@ -67,7 +71,7 @@
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav">
+              <ul class="navbar-nav flex-column-nav">
                 {% comment %} inicio 
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
@@ -107,7 +111,16 @@
                   >
                 </li>
 
-                {% comment %} inicio de sesion {% endcomment %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'crearFichaPaciente' %}"
+                    >Crear ficha clínica paciente</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'listarFichaPaciente' %}"
+                    >Lista de ficha clínica paciente</a>
+                </li>
+              </ul>
+               {% comment %} inicio de sesion {% endcomment %}
                 <div>
                 <form
                   class="d-flex"
@@ -117,21 +130,19 @@
                 ></form>
                 {% if user.is_authenticated %}
                 <a
-                  class="btn btn-outline-primary ms-2"
+                  class="btn btn-outline-primary ms-2 login-button"
                   href="{% url 'logout' %}"
                   role="button"
                   >Cerrar sesión</a
                 >
                 {% else %}
                 <a
-                  class="btn btn-outline-primary ms-2"
+                  class="btn btn-outline-primary ms-2 login-button"
                   href="{% url 'login' %}"
                   role="button"
                   >Iniciar sesión</a
                 >
                 {% endif %}
-
-              </ul>
             </div>
           </div>
         </nav>

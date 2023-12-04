@@ -1,17 +1,31 @@
 {% extends 'clinicaweb.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
+  <div class="container mt-5">
     {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-success">{{message}}</div>
-        {% endfor %}
+      {% for message in messages %}
+        <div class="alert alert-success">{{message}}</div>
+      {% endfor %}
     {% endif %}
     <h1 class="text-center">Crear Receta</h1>
 
-    <form method="post" action="{% url 'crearReceta' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Guardar Receta</button>
-    </form>{% include 'footer.html' %}
-
+    <form method="post" action="{% url 'crearReceta' %}" class="bg-light p-5 mt-2 mb-5 rounded shadow">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group mb-3">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary mt-3">Guardar Receta</button>
+    </form>
+  </div>
+  {% include 'footer.html' %}
 {% endblock %}
