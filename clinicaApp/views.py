@@ -3,15 +3,17 @@ from django.views.generic.edit import CreateView
 from django.template.loader import get_template
 from django.template.loader import get_template
 from django_xhtml2pdf.utils import generate_pdf 
+from reportlab.pdfgen import canvas
 from django.contrib.auth.models import AbstractUser
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse 
 from clinicaApp.models import Paciente, Doctor, Especialidad, Agenda, FichaPaciente, Receta, Medicamentos, Tipousuario, Permiso
+from mysite.settings import BASE_DIR
 from .forms import AgendaForm
 from .forms import RecetaForm
 import re
-
+import os
 
 # Create your views here.
 #///////////////////// GENERALIDADES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -429,12 +431,16 @@ def recetaListar(request):
     return render(request, 'receta_listar.html', {'recetas': recetas})
 
 def exportar_pdf(request, id_receta):
-    receta = Receta.objects.get(id_receta=id_receta)
-    template_path = 'receta_pdf.html'
-    context = {'receta': receta}
-    template = get_template(template_path)
-    html = template.render(context)
-    pdf = generate_pdf(html)
-    response = HttpResponse(pdf, content_type='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'filename="receta.pdf"'
+    p = canvas.Canvas(response)
+    receta = Receta.objects.get(id_receta=id_receta)
+    p.drawString(100, 800, f"Receta Médica - {receta.fecha}")
+    p.drawString(100, 780, f"Rut del Paciente: {receta.rutPaciente.rut_paciente}")
+    p.drawString(100, 760, f"Nombre del Paciente: {receta.rutPaciente.nombre_paciente}")
+    p.drawString(100, 740, f"Medicamentos: {receta.medicamentos.nombre_medicamento}")
+    p.drawString(100, 720, f"Instrucciones: {receta.instrucciones}")
+    p.showPage()
+    p.save()
+    
     return response
