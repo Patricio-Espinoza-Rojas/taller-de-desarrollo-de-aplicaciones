@@ -2,8 +2,11 @@
 {% block content %}
 {% load static %}
 <!-- Carrusel -->
+
+
 <div id="carouselContainner" class="carousel slide mx-auto mt-5 shadow" style="width: 50%;" data-ride="carousel" data-interval="50"  data-bs-ride="carousel">
-    <div class="carousel-inner">
+    <div>
+  <div class="carousel-inner">
       <div class="carousel-item active">
         <img src="{% static 'img/medicina-1.jpg' %}" class="d-block w-100" alt="Imagen 1">
         
@@ -19,29 +22,31 @@
 
 <!-- Sección  equipo medico -->
 
-<div class="container mt-5">
-  <h2 class="text-center">Nuestro equipo</h2>
-  <div class="row">
-      {% for Doctor in equipo %}
-      <div class="col-md-4">
-          <div class="card">
-              {% if Doctor.foto %}
-              <img src="{{ Doctor.foto.url }}" class="card-img-top" alt="{{ Doctor.nombre_doctor }}">
-              {% else %}
-              <!-- Aquí puedes poner una imagen por defecto en caso de que el doctor no tenga una foto -->
-              <img src="{% static 'img/medicina-3.jpg' %}" class="card-img-top" alt="Imagen por defecto">
-              {% endif %}
-              <div class="card-body">
-                  <h5 class="card-title">{{ Doctor.nombre_doctor }}</h5>
-                  <p class="card-text">{{ Doctor.especialidad }}</p>
-              </div>
-          </div>
-      </div>
-      {% empty %}
-      <div class="col-12">
-        <p class="text-center">No hay Funcionarios disponibles en este momento.</p>
-      </div>
-      {% endfor %}
+<div class="bg-secondary bg-opacity-10 rounded mt-5">
+  <div class="container mt-5 p-5">
+    <h2 class="text-center pb-2">Nuestro equipo</h2>
+    <div class="row">
+        {% for Doctor in equipo %}
+        <div class="col-md-4">
+            <div class="card">
+                {% if Doctor.foto %}
+                <img src="{{ Doctor.foto.url }}" class="card-img-top" alt="{{ Doctor.nombre_doctor }}">
+                {% else %}
+                <!-- Aquí puedes poner una imagen por defecto en caso de que el doctor no tenga una foto -->
+                <img src="{% static 'img/medicina-3.jpg' %}" class="card-img-top" alt="Imagen por defecto">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ Doctor.nombre_doctor }}</h5>
+                    <p class="card-text">{{ Doctor.especialidad }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+          <p class="text-center">No hay Funcionarios disponibles en este momento.</p>
+        </div>
+        {% endfor %}
+    </div>
   </div>
 </div>
 
@@ -50,8 +55,8 @@
 
 
 <!-- Sección de contacto -->
-<div class="container my-5 text-center rounded shadow">
-  <h2 class="py-3">Contacto</h2>
+<div class="container my-5 text-center rounded shadow p-3 mb-5 bg-info bg-opacity-75">
+  <h2 class="py-3 text-white">Contacto</h2>
   <form method="post" class="bg-light p-5 mb-4 rounded">
     {% csrf_token %}
     <div class="form-group">
