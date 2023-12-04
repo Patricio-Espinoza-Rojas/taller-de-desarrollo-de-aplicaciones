@@ -16,28 +16,6 @@
     </div>
   </div>
 
-  <!-- Sección Nuestros servicios -->
-  <div class="container mt-5">
-    <h2 class="text-center">Nuestros servicios</h2>
-    <div class="row">
-      {% for servicio in servicios %}
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <img src="{{ servicio.imagen.url }}" class="card-img-top" alt="{{ servicio.nombre }}">
-          <div class="card-body">
-            <h5 class="card-title">{{ servicio.nombre }}</h5>
-            <p class="card-text">{{ servicio.descripcion }}</p>
-            <a href="{{ servicio.url }}" class="btn btn-primary">Más información</a>
-          </div>
-        </div>
-      </div>
-      {% empty %}
-      <div class="col-12">
-        <p class="text-center">No hay servicios disponibles en este momento.</p>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
 
 <!-- Sección  equipo medico -->
 
@@ -67,20 +45,13 @@
   </div>
 </div>
 
-<!-- Sección de testimonios -->
-<div class="container mt-5">
-  <h2>Testimonios</h2>
-  {% for testimonio in testimonios %}
-  <blockquote class="blockquote">
-      <p>{{ testimonio.mensaje }}</p>
-      <footer class="blockquote-footer">{{ testimonio.nombre }}</footer>
-  </blockquote>
-  {% endfor %}
-</div>
+  <!-- Sección Nuestros servicios -->
+
+
 
 <!-- Sección de contacto -->
 <div class="container my-5 text-center rounded shadow">
-  <h2>Contacto</h2>
+  <h2 class="py-3">Contacto</h2>
   <form method="post" class="bg-light p-5 mb-4 rounded">
     {% csrf_token %}
     <div class="form-group">
