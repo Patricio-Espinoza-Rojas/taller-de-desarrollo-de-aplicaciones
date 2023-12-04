@@ -7,6 +7,10 @@ class AgendaForm(forms.ModelForm):
     class Meta:
         model = Agenda
         fields = ['id_agenda', 'dia', 'hora'] 
+        widgets = {
+            'dia': DateInput(attrs={'type': 'date'}),
+        }
+
 
 class RecetaForm(forms.ModelForm):
     class Meta:
