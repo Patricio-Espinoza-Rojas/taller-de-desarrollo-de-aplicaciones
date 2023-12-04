@@ -3,6 +3,9 @@ from django.views.generic.edit import CreateView
 from django.template.loader import get_template
 from django.template.loader import get_template
 from django_xhtml2pdf.utils import generate_pdf 
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.http import JsonResponse
 from reportlab.pdfgen import canvas
 from django.contrib.auth.models import AbstractUser
 from django.contrib import messages
@@ -31,12 +34,12 @@ def inicio(request):
         form = AgendaForm()
         doctores = Doctor.objects.all()
         especialidades = Especialidad.objects.all()
-        equipo = Doctor.objects.all()  # Cambia Doctor por Doctor
+        equipo = Doctor.objects.all()  
         return render(request, 'inicio.html', {
         'form': form,
         'doctores': doctores,
         'especialidades': especialidades,
-        'equipo': equipo,  # Ahora 'equipo' contiene los doctores
+        'equipo': equipo, 
     })
 
 def nosotros(request):
@@ -60,6 +63,17 @@ def contacto(request):
         pass
     return render(request, 'contacto.html')
 
+def validar_correo(correo):
+    regex_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    if re.match(regex_pattern, correo):
+        try:
+            validate_email(correo)
+            return True  
+        except ValidationError:
+            return False  
+    else:
+        return False  
+
 def footer(request):
     return render(request, "footer.html")
 
@@ -68,6 +82,7 @@ def inicioSesion(request):
 
 def about(request):
     return HttpResponse('About')
+
 
 #MODULOS FUNCIONES PARA VISTA INICIO
 #*********************************************************************************************************
@@ -146,6 +161,7 @@ def validar_nombreapellido(string):
         return True
     return False
 
+
 #CREAR PACIENTE CON FUNCIONES DE VALIDACIONES 
 def guardar(request):
     rut = request.POST["rut"]
@@ -179,9 +195,15 @@ def guardar(request):
     # Validar que el nombre y la dirección contengan solo letras y espacios
     if not (nombre.replace(" ", "").isalpha()):
         messages.error(request, 'Nombre solo deben contener letras y espacios.')
-        return redirect('listarPaciente')   
+        return redirect('listarPaciente')  
+    
+    if validar_correo(correo):
+        messages.success(request, 'Correo validado')
+    else:
+        messages.error(request, 'Correo incorrecto')
+        return redirect('listarPaciente')  
 
-
+    
     tipousuario_fk = get_object_or_404(Tipousuario, id_tipousuario=1)
     pa = Paciente(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
                     correo_paciente=correo, tipousuario=tipousuario_fk)
@@ -234,11 +256,18 @@ def editar(request):
         else:
             messages.error(request, "Nombre incorrecto")
             return redirect('listarPaciente') 
-
+        
         # Validar que el nombre y la dirección contengan solo letras y espacios
         if not (nombre.replace(" ", "").isalpha()):
             messages.error(request, 'Nombre solo deben contener letras y espacios.')
             return redirect('listarPaciente')  
+        
+        if validar_correo(correo):
+            messages.success(request, 'Correo validado')
+        else:
+            messages.error(request, 'Correo incorrecto')
+            return redirect('listarPaciente')  
+
         
         paciente = get_object_or_404(Paciente, rut_paciente=rut_paciente)
         paciente.rut_paciente = rut
@@ -305,13 +334,19 @@ def guardarDoctor(request):
         if not validar_nombreDoctor(nombre_doctor):
             messages.error(request, "Nombre incorrecto")
             return redirect('listarDoctor') 
-
+        
         # Verificar si la especialidad con el id proporcionado existe
         try:
             especialidad = Especialidad.objects.get(id_especialidad=id_especialidad)
         except Especialidad.DoesNotExist:
             messages.error(request, 'Especialidad no encontrada.')
             return redirect('listarDoctor')
+        
+        if validar_correo(correo):
+            messages.success(request, 'Correo validado')
+        else:
+            messages.error(request, 'Correo incorrecto')
+            return redirect('listarDoctor') 
 
         doc = Doctor(
             nombre_doctor=nombre_doctor,
@@ -360,6 +395,7 @@ def editarDoctor(request, id_doctor):
     doctor = get_object_or_404(Doctor, id_doctor=id_doctor)
 
     if request.method == 'POST':
+                
         try:
             id_doctor_form = request.POST["id_doctor"]
             nombre_doctor = request.POST["nombre_doctor"]
@@ -367,6 +403,20 @@ def editarDoctor(request, id_doctor):
             id_especialidad = request.POST["especialidad"]
             correo = request.POST["correo_doctor"]
             foto = request.FILES["foto"] if 'foto' in request.FILES else None
+            
+            if len(nombre_doctor) > 100 or len(titulo) > 100:
+                messages.error(request, 'Nombre, título del profesional, y especialidad no deben exceder los 100 caracteres.')
+                return redirect('listarDoctor')
+
+            if not validar_nombreDoctor(nombre_doctor):
+                messages.error(request, "Nombre incorrecto")
+                return redirect('listarDoctor') 
+            
+            if validar_correo(correo):
+                messages.success(request, 'Correo validado')
+            else:
+                messages.error(request, 'Correo incorrecto')
+                return redirect('listarDoctor') 
 
             doctor.id_doctor = id_doctor_form
             doctor.nombre_doctor = nombre_doctor
@@ -383,6 +433,7 @@ def editarDoctor(request, id_doctor):
         except Exception as e:
             messages.error(request, f'Error: {e}')
         return redirect('listarDoctor')
+
 
     else:
         return render(request, "doctores_actualizar.html", {'doctor': doctor})
