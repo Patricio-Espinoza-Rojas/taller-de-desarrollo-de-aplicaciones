@@ -165,6 +165,8 @@ def guardar(request):
         messages.error(request, 'Nombre solo deben contener letras y espacios.')
         return redirect('listarPaciente')   
     
+    
+    
     pa = Paciente(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
                     correo_paciente=correo)
     pa.save()
