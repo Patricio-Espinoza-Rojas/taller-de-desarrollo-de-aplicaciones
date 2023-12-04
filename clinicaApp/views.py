@@ -34,12 +34,12 @@ def inicio(request):
         form = AgendaForm()
         doctores = Doctor.objects.all()
         especialidades = Especialidad.objects.all()
-        equipo = Doctor.objects.all()  # Cambia Doctor por Doctor
+        equipo = Doctor.objects.all()  
         return render(request, 'inicio.html', {
         'form': form,
         'doctores': doctores,
         'especialidades': especialidades,
-        'equipo': equipo,  # Ahora 'equipo' contiene los doctores
+        'equipo': equipo, 
     })
 
 def nosotros(request):
