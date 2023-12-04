@@ -36,10 +36,9 @@ urlpatterns = [
     path('doctor/guardar', views.guardarDoctor, name='guardar_doctor'),
     path('receta/crear', views.crearReceta, name='crearReceta'),
     path('receta/listar', views.recetaListar, name='recetaListar'),
-    path('exportar_pdf/<int:id_receta>/', views.exportar_pdf, name='exportar_pdf'),
+    path('exportar_pdf/<int:id_receta>/', views.exportar_pdf, name='exportar_pdf'),   
     path('Crear ficha paciente', views.crearFichaPaciente, name='crearFichaPaciente'),
-    path('Listar ficha paciente', views.listarFichaPaciente, name='listarFichaPaciente'),
-    
+    path('Listar ficha paciente', views.listarFichaPaciente, name='listarFichaPaciente'), 
 
 ]
 if settings.DEBUG:
