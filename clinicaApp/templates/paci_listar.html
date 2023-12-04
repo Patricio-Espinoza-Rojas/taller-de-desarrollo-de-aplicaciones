@@ -7,9 +7,9 @@
     {% endfor %}
 {% endif %}
 
-    <h1 class="text-center">Lista de Pacientes</h1>
+    <h1 class="text-center mt-5">Lista de Pacientes</h1>
 
-    <table class="table table-ligth w-75 mx-auto text-center">
+    <table class="table table-ligth w-75 mx-auto mt-2 mb-5 text-center">
         <tr class="table-dark">
             <th>Rut Paciente</th>
             <th>Nombre Paciente</th>
@@ -27,23 +27,25 @@
             <td>{{paciente.telefono_paciente}}</td>
             <td>{{paciente.correo_paciente}}</td>
             <td> 
-                <form action="{% url 'eliminar' paciente.id %}"
-                 method="post">
+                 <form action="{% url 'eliminar' paciente.rut_paciente %}" method="post">
                     {% csrf_token %}
                     <button class="btn btn-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">
                         <i class="fa fa-trash"></i>
                     </button>
-                </form>
+                </form> 
             </td> 
             <td>               
-                <form action="{% url 'detalle' paciente.id %}"
-                    method="post">
+                <form action="{% url 'detalle' paciente.rut_paciente %}" method="post">
                     {% csrf_token %}
                     <button class="btn btn-warning" title="Editar">
                         <i class="fa fa-edit"></i>
                     </button>
                 </form>
             </td> 
+        </tr>
+    {% empty %}
+        <tr>
+          <td colspan="5" class="text-center">No hay pacientes registrados.</td>
         </tr>   
     {% endfor %}
     </table>

@@ -1,0 +1,40 @@
+{% extends 'clinicaweb.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="my-3 text-center">Crear ficha clínica de pacientes</h2>
+    <form method="post" class="bg-light p-5 mt-2 mb-5 rounded shadow">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="paciente">Paciente</label>
+        <input type="text" class="form-control" id="paciente" name="paciente" required>
+      </div>
+      <div class="form-group">
+        <label for="doctor">Doctor</label>
+        <input type="text" class="form-control" id="doctor" name="doctor" required>
+      </div>
+      <div class="form-group">
+        <label for="anamnesis">Anamnesis</label>
+        <input type="text" class="form-control" id="anamnesis" name="anamnesis" required>
+      </div>
+      <div class="form-group">
+        <label for="diagnostico">Diagnóstico</label>
+        <input type="text" class="form-control" id="diagnostico" name="diagnostico" required>
+      </div>
+      <div class="form-group">
+        <label for="fecha">Fecha de atención</label>
+        <input type="datetime-local" class="form-control" id="fecha" name="fecha" required>
+      </div>
+     
+      <div class="form-group">
+        <label for="receta">Receta médica</label>
+        <select class="form-control" id="receta" name="receta">
+          <!-- Aquí debes llenar las opciones con las recetas disponibles -->
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Crear</button>
+    </form>
+  </div>
+  {% include 'footer.html' %}
+{% endblock %}

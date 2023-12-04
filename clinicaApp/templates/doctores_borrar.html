@@ -6,25 +6,25 @@
             <div class="alert alert-success">{{message}}</div>
         {% endfor %}
     {% endif %}
-    <h1 class="text-center">Eliminar Médicos</h1>
+    <h1 class="text-center">Eliminar Doctors</h1>
 
     <table class="table table-ligth w-75 mx-auto text-center">
         <tr class="table-dark">
-            <th>Id Médico</th>
-            <th>Nombre Médico</th>
+            <th>Id Doctor</th>
+            <th>Nombre Doctor</th>
             <th>Tílo Profesional</th>
             <th>Especialidad Médica</th>
-            <th>Correo de Médico</th>
+            <th>Correo de Doctor</th>
             <th></th>
-    {% for doctor in Doctor %}
+    {% for doctor in doctor %}
         <tr>
-            <td>{{medico.id_doctor}}</td>
-            <td>{{medico.nombre_doctor}}</td>
-            <td>{{medico.titulo_profesional}}</td>
-            <td>{{medico.id_especialidad}}</td>
-            <td>{{medico.correo}}</td>
+            <td>{{doctor.id_doctor}}</td>
+            <td>{{doctor.nombre_doctor}}</td>
+            <td>{{doctor.titulo_profesional}}</td>
+            <td>{{doctor.id_especialidad}}</td>
+            <td>{{doctor.correo}}</td>
             <td> 
-                <form action="{% url 'eliminar_doctor' Doctor.id_doctor %}"
+                <form action="{% url 'eliminarDoctor' doctor.id_doctor %}"
                  method="post">
                     {% csrf_token %}
                     <button class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">

@@ -2,8 +2,11 @@
 {% block content %}
 {% load static %}
 <!-- Carrusel -->
-<div id="carouselContainner" class="carousel slide mx-auto m-4 shadow" style="width: 50%;" data-ride="carousel" data-interval="50"  data-bs-ride="carousel">
-    <div class="carousel-inner">
+
+
+<div id="carouselContainner" class="carousel slide mx-auto mt-5 shadow" style="width: 50%;" data-ride="carousel" data-interval="50"  data-bs-ride="carousel">
+    <div>
+  <div class="carousel-inner">
       <div class="carousel-item active">
         <img src="{% static 'img/medicina-1.jpg' %}" class="d-block w-100" alt="Imagen 1">
         
@@ -16,86 +19,64 @@
     </div>
   </div>
 
- <!-- Sección Agendar cita -->
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-3 shadow">
-      <h2 class="text-center text-primary py-4">Agendar cita</h2>
-      <form method="post" class="needs-validation mt-4 p-5 m-4" novalidate>
-        {% csrf_token %}
-        <div class="form-group">
-          {{ form.as_p }}
+
+<!-- Sección  equipo medico -->
+
+<div class="bg-secondary bg-opacity-10 rounded mt-5">
+  <div class="container mt-5 p-5">
+    <h2 class="text-center pb-2">Nuestro equipo</h2>
+    <div class="row">
+        {% for Doctor in equipo %}
+        <div class="col-md-4">
+            <div class="card">
+                {% if Doctor.foto %}
+                <img src="{{ Doctor.foto.url }}" class="card-img-top" alt="{{ Doctor.nombre_doctor }}">
+                {% else %}
+                <!-- Aquí puedes poner una imagen por defecto en caso de que el doctor no tenga una foto -->
+                <img src="{% static 'img/medicina-3.jpg' %}" class="card-img-top" alt="Imagen por defecto">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ Doctor.nombre_doctor }}</h5>
+                    <p class="card-text">{{ Doctor.especialidad }}</p>
+                </div>
+            </div>
         </div>
-        <div class="d-grid gap-2">
-          <button type="submit" class="btn btn-primary">Agendar cita</button>
+        {% empty %}
+        <div class="col-12">
+          <p class="text-center">No hay Funcionarios disponibles en este momento.</p>
         </div>
-      </form>
+        {% endfor %}
     </div>
   </div>
 </div>
 
   <!-- Sección Nuestros servicios -->
-  <div class="container mt-5">
-    <h2 class="text-center text-secondary">Nuestros servicios</h2>
-    <div class="row">
-      {% for servicio in servicios %}
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <img src="{{ servicio.imagen.url }}" class="card-img-top" alt="{{ servicio.nombre }}">
-          <div class="card-body">
-            <h5 class="card-title">{{ servicio.nombre }}</h5>
-            <p class="card-text">{{ servicio.descripcion }}</p>
-            <a href="{{ servicio.url }}" class="btn btn-primary">Más información</a>
-          </div>
-        </div>
-      </div>
-      {% empty %}
-      <div class="col-12">
-        <p class="text-center">No hay servicios disponibles en este momento.</p>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
 
-<!-- Sección  equipo medico -->
 
-<div class="container mt-5">
-  <h2>Nuestro equipo</h2>
-  <div class="row">
-      {% for Doctor in equipo %}
-      <div class="col-md-4">
-          <div class="card">
-              {% if Doctor.foto %}
-              <img src="{{ Doctor.foto.url }}" class="card-img-top" alt="{{ Doctor.nombre_doctor }}">
-              {% else %}
-              <!-- Aquí puedes poner una imagen por defecto en caso de que el doctor no tenga una foto -->
-              <img src="{% static 'img/medicina-3.jpg' %}" class="card-img-top" alt="Imagen por defecto">
-              {% endif %}
-              <div class="card-body">
-                  <h5 class="card-title">{{ Doctor.nombre_doctor }}</h5>
-                  <p class="card-text">{{ Doctor.titulo }}</p>
-              </div>
-          </div>
-      </div>
-      {% endfor %}
-  </div>
-</div>
-
-<!-- Sección de testimonios -->
-<div class="container mt-5">
-  <h2>Testimonios</h2>
-  {% for testimonio in testimonios %}
-  <blockquote class="blockquote">
-      <p>{{ testimonio.mensaje }}</p>
-      <footer class="blockquote-footer">{{ testimonio.nombre }}</footer>
-  </blockquote>
-  {% endfor %}
-</div>
 
 <!-- Sección de contacto -->
-<div class="container mt-5">
-  <h2>Contacto</h2>
-  <!-- ... tu formulario de contacto aquí ... -->
+<div class="container my-5 text-center rounded shadow p-3 mb-5 bg-info bg-opacity-75">
+  <h2 class="py-3 text-white">Contacto</h2>
+  <form method="post" class="bg-light p-5 mb-4 rounded">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="nombre">Nombre</label>
+      <input type="text" class="form-control" id="nombre" name="nombre" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Correo Electrónico</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="telefono">Teléfono</label>
+      <input type="tel" class="form-control" id="telefono" name="telefono" required>
+    </div>
+    <div class="form-group">
+      <label for="mensaje">Mensaje</label>
+      <textarea class="form-control" id="mensaje" name="mensaje" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3 px-5">Enviar</button>
+  </form>
 </div>
 
 {% include 'footer.html' %}

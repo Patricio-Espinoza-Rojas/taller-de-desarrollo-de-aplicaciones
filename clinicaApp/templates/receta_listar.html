@@ -1,0 +1,65 @@
+{% extends 'clinicaweb.html' %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+
+    <h1 class="text-center mt-5">Lista de Recetas</h1>
+
+    <table class="table table-light w-75 mx-auto mt-2 mb-5 text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Fecha</th>
+                <th>Rut Paciente</th>
+                <th>Nombre Paciente</th>
+                <th>Medicamentos</th>
+                <th>Instrucciones</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for receta in recetas %}
+                <tr>
+                    <td>{{ receta.fecha }}</td>
+                    <td>{{ receta.rutPaciente.rut_paciente }}</td>
+                    <td>{{ receta.rutPaciente.nombre_paciente }}</td>
+                    <td>{{ receta.medicamentos.nombre_medicamento }}</td>
+                    <td>{{ receta.instrucciones }}</td>
+                    <td></td>         
+                    {% comment %} <td> 
+                        <form action="{% url 'eliminar_receta' receta.id_receta %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar la receta?')">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form> 
+                    </td>  {% endcomment %}
+                    {% comment %} <td>               
+                        <form action="{% url 'detalle_receta' receta.id_receta %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-warning" title="Editar">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </form>
+                    </td>  {% endcomment %}
+                    <td>
+                        <form action="{% url 'exportar_pdf' receta.id_receta %}" method="get">
+                            <button class="btn btn-primary" title="Exportar a PDF">
+                                <i class="fa fa-file-pdf"></i> Exportar PDF
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No hay recetas registradas.</td>
+                </tr>   
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include 'footer.html' %}
+{% endblock %}

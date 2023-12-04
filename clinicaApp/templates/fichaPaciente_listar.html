@@ -1,0 +1,41 @@
+{% extends 'clinicaweb.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="my-3 text-center">Lista Ficha Paciente</h2>
+    <table class="table table-striped mt-2 mb-5">
+      <thead>
+        <tr class="table-dark">
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Rut Paciente</th>
+          <th scope="col">Fecha de Nacimiento</th>
+          <th scope="col">Direción Paciente</th>
+          <th scope="col">Teléfono Paciente</th>
+          <th scope="col">Correo Paciente</th>
+          <!-- Agregar más columnas para otros campos que quieras mostrar-->
+        </tr>
+      </thead>
+      <tbody>
+        {% for paciente in pacientes %}
+          <tr>
+            <th scope="row">{{ paciente.id }}</th>
+            <td>{{ paciente.nombre }}</td>
+            <td>{{paciente.rut_paciente}}</td>
+            <td>{{ paciente.fecha_nacimiento }}</td>
+            <td>{{paciente.direccion_paciente}}</td>
+            <td>{{paciente.telefono_paciente}}</td>
+            <td>{{paciente.correo_paciente}}</td>
+            <!-- Agrega más celdas para otros campos que se quiera mostrar -->
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-center">No hay fichas clínicas de pacientes registrados.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% include 'footer.html' %}
+{% endblock %}

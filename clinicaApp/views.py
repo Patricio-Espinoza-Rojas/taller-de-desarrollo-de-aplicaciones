@@ -1,10 +1,19 @@
 from django.shortcuts import render, redirect
+from django.views.generic.edit import CreateView
+from django.template.loader import get_template
+from django.template.loader import get_template
+from django_xhtml2pdf.utils import generate_pdf 
+from reportlab.pdfgen import canvas
+from django.contrib.auth.models import AbstractUser
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse 
 from clinicaApp.models import Paciente, Doctor, Especialidad, Agenda, FichaPaciente, Receta, Medicamentos, Tipousuario, Permiso
+from mysite.settings import BASE_DIR
 from .forms import AgendaForm
-
-from django.contrib import messages
+from .forms import RecetaForm
 import re
+import os
 
 # Create your views here.
 #///////////////////// GENERALIDADES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -22,7 +31,7 @@ def inicio(request):
         form = AgendaForm()
         doctores = Doctor.objects.all()
         especialidades = Especialidad.objects.all()
-        equipo = Doctor.objects.all()  # Cambia Medico por Doctor
+        equipo = Doctor.objects.all()  # Cambia Doctor por Doctor
         return render(request, 'inicio.html', {
         'form': form,
         'doctores': doctores,
@@ -30,12 +39,15 @@ def inicio(request):
         'equipo': equipo,  # Ahora 'equipo' contiene los doctores
     })
 
+def nosotros(request):
+    return render(request, 'nosotros.html')
+
 def servicios(request):
     servicios = Servicio.objects.all()
     return render(request, 'servicios.html', {'servicios': servicios})
 
 def equipo(request):
-    equipo = Medico.objects.all()
+    equipo = Doctor.objects.all()
     return render(request, 'equipo.html', {'equipo': equipo})
 
 def testimonios(request):
@@ -55,34 +67,38 @@ def inicioSesion(request):
     return render(request, "login.html")
 
 def about(request):
-    return HttpResponse('About')    
-
+    return HttpResponse('About')
 
 #MODULOS FUNCIONES PARA VISTA INICIO
-
 #*********************************************************************************************************
 #*********************************************************************************************************
 #///////////////////// VISTA INICIO, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #********************************************************************************************************
 #********************************************************************************************************
 
-def agendar_cita(request):
+def agendarCita(request):
     if request.method == 'POST':
         form = AgendaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('inicio')
+            return redirect('agendarCita')
     else:
         form = AgendaForm()
     return render(request, 'agendar_cita.html', {'form': form})
 
 #MODULOS FUNCIONES PARA PACIENTE
-
 #*********************************************************************************************************
 #*********************************************************************************************************
 #///////////////////// PACIENTES, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #********************************************************************************************************
 #********************************************************************************************************
+
+def crearFichaPaciente(request):
+    return render(request, "fichaPaciente_crear.html")
+
+def listarFichaPaciente(request):
+    return render(request, "fichaPaciente_listar.html")
+
 
 def crearPaciente(request):
     return render(request, "paci_nuevo.html")
@@ -164,11 +180,16 @@ def guardar(request):
     if not (nombre.replace(" ", "").isalpha()):
         messages.error(request, 'Nombre solo deben contener letras y espacios.')
         return redirect('listarPaciente')   
+<<<<<<< HEAD
     
     
     
+=======
+
+    tipousuario_fk = get_object_or_404(Tipousuario, id_tipousuario=1)
+>>>>>>> df2943c721ed60499f525372bad3128e7275fe21
     pa = Paciente(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
-                    correo_paciente=correo)
+                    correo_paciente=correo, tipousuario=tipousuario_fk)
     pa.save()
     messages.success(request, 'Paciente Guardado')
     return redirect('listarPaciente')
@@ -176,76 +197,90 @@ def guardar(request):
 #/////////VALIDACIONES EN EDITAR PACIENTE\\\\\\\\\\\\\\\\\\\\\\\\
 
 #Eliminar del listado con boton
-def eliminar(request, id):
-    paciente = Paciente.objects.filter(pk=id)
+def eliminar(request, rut_paciente):
+    paciente = Paciente.objects.get(rut_paciente=rut_paciente)
     paciente.delete()
     messages.success(request, 'Paciente eliminado')
     return redirect('listarPaciente')
 
 #listar para actualizar 
-def detalle(request, id):
-    paciente = Paciente.objects.get(pk=id)
-    return render(request, "paciente_editar.html",{
-        'paciente' : paciente
+def detalle(request, rut_paciente):
+    paciente = Paciente.objects.get(rut_paciente=rut_paciente)
+    return render(request, "paciente_editar.html", {
+        'paciente': paciente
     })
 
-
 def editar(request):
-    rut = request.POST["rut"]
-    nombre = request.POST["nombre"]
-    direccion = request.POST["direccion"]
-    telefono = request.POST["telefono"]
-    correo = request.POST["correo"]
-    id = request.POST["id"]
+    try:
+        rut = request.POST["rut"]
+        nombre = request.POST["nombre"]
+        direccion = request.POST["direccion"]
+        telefono = request.POST["telefono"]
+        correo = request.POST["correo"]
+        rut_paciente = request.POST["rut"]    
+        # if validar_rutstring(rut):
+        #     messages.success(request,'Rut Validado sin letras')        
+        # else:
+        #     messages.error(request,"No se admiten letras en Rut")
+        #     return redirect('listarPaciente')
+        
+        # Validar longitud máxima para el RUT
+        if len(rut) < 2 or len(rut) > 12:
+            messages.error(request, 'Rut Inválido.')
+            return redirect('listarPaciente')   
     
-    # if validar_rutstring(rut):
-    #     messages.success(request,'Rut Validado sin letras')        
-    # else:
-    #     messages.error(request,"No se admiten letras en Rut")
-    #     return redirect('listarPaciente')
-    
-    # Validar longitud máxima para el RUT
-    if len(rut) < 2 or len(rut) > 12:
-        messages.error(request, 'Rut Inválido.')
-        return redirect('listarPaciente')   
- 
-    # Validar longitud máxima para nombre y dirección
-    if len(nombre) > 100 or len(direccion) > 100:
-        messages.error(request, 'Nombre y dirección no deben exceder los 100 caracteres.')
-        return redirect('listarPaciente')
-    
-    if validar_nombreapellido(nombre):
-        messages.success(request, 'Nombre Validado')
-    else:
-        messages.error(request, "Nombre incorrecto")
-        return redirect('listarPaciente') 
+        # Validar longitud máxima para nombre y dirección
+        if len(nombre) > 100 or len(direccion) > 100:
+            messages.error(request, 'Nombre y dirección no deben exceder los 100 caracteres.')
+            return redirect('listarPaciente')
+        
+        if validar_nombreapellido(nombre):
+            messages.success(request, 'Nombre Validado')
+        else:
+            messages.error(request, "Nombre incorrecto")
+            return redirect('listarPaciente') 
 
-    # Validar que el nombre y la dirección contengan solo letras y espacios
-    if not (nombre.replace(" ", "").isalpha()):
-        messages.error(request, 'Nombre solo deben contener letras y espacios.')
-        return redirect('listarPaciente')   
-    
-    Paciente.objects.filter(pk=id).update(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
-                    correo_paciente=correo)
-    messages.success(request, 'Paciente Actualizado')
+        # Validar que el nombre y la dirección contengan solo letras y espacios
+        if not (nombre.replace(" ", "").isalpha()):
+            messages.error(request, 'Nombre solo deben contener letras y espacios.')
+            return redirect('listarPaciente')  
+        
+        paciente = get_object_or_404(Paciente, rut_paciente=rut_paciente)
+        paciente.rut_paciente = rut
+        paciente.rut_paciente = rut
+        paciente.nombre_paciente = nombre
+        paciente.direccion_paciente = direccion
+        paciente.telefono_paciente = telefono
+        paciente.correo_paciente = correo
+        paciente.save()
+
+        messages.success(request, 'Paciente Actualizado')
+    except Exception as e:
+            messages.error(request, f'Error: {e}')
+            
     return redirect('listarPaciente')
 
-
+#MÓDULOS DOCTORES
 #*********************************************************************************************************
 #*********************************************************************************************************
-#///////////////////// MÉDICOS, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#///////////////////// DOCTORES, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #********************************************************************************************************
 #********************************************************************************************************
 
 def crearDoctor(request):
     especialidades = Especialidad.objects.all()
+    return render(request, "doctores_nuevos.html", {'lista_especialidades': especialidades})
 
-    return render(request, "medicos_nuevos.html", {'lista_especialidades': especialidades})
-
+def detalleDoctor(request, id_doctor):
+    doctor = Doctor.objects.get(pk=id_doctor)
+    return render(request, "doctores_editar.html", {
+        'doctor': doctor
+    })
+    
 # Listar doctores
 def listarDoctor(request):
-    medicos = Doctor.objects.all()  # Recuperar todos los médicos de la base de datos
-    return render(request, 'medicos_listar.html', {'medicos': medicos})  # Pasar los médicos a la plantilla
+    doctores = Doctor.objects.all()  # Recuperar todos los médicos de la base de datos
+    return render(request, 'doctores_listar.html', {'doctores': doctores})  # Pasar los médicos a la plantilla
 
 def validar_idInt(id_doctor):
     # Esta función verifica si el id_doctor solo contiene números
@@ -257,7 +292,7 @@ def validar_nombreDoctor(nombre_doctor):
     return bool(pattern.match(nombre_doctor))
 
 def guardarDoctor(request):
-    especialidades = Especialidad.objects.all()
+    especialidades = Especialidad.objects.all()    
 
     if request.method == 'POST':
         nombre_doctor = request.POST.get("nombre_doctor")
@@ -265,6 +300,8 @@ def guardarDoctor(request):
         id_especialidad = request.POST.get("especialidad")
         correo = request.POST.get("correo_doctor")
         foto = request.FILES.get("foto", None)
+        # id_agenda = request.POST.get("agenda")
+        # agenda = get_object_or_404(Agenda, id_agenda=id_agenda)
 
         if len(nombre_doctor) > 100 or len(titulo) > 100:
             messages.error(request, 'Nombre, título del profesional, y especialidad no deben exceder los 100 caracteres.')
@@ -287,6 +324,7 @@ def guardarDoctor(request):
             especialidad=especialidad,
             correo=correo,
             foto=foto
+            # agenda=agenda
         )
         doc.save()
         messages.success(request, 'Doctor Guardado')
@@ -296,8 +334,7 @@ def guardarDoctor(request):
         # Obtener el valor de 'especialidad' directamente del QueryDict
         id_especialidad = request.POST.getlist("especialidad")
         form = especialidad(initial={'especialidad': id_especialidad}) 
-        return render(request, "medicos_nuevos.html", {'form': form, 'lista_especialidades': especialidades})
-
+        return render(request, "doctores_nuevos.html", {'form': form, 'lista_especialidades': especialidades})
 
 # Eliminar doctor
 def eliminarDoctor(request, id_doctor):
@@ -319,31 +356,97 @@ def actualizarDoctor(request, id_doctor):
         messages.success(request, 'Doctor actualizado')
         return redirect('listarDoctor')
     else:
-        return render(request, "medicos_actualizar.html",{
+        return render(request, "doctores_actualizar.html",{
             'doctor' : doctor
         })
 
 # Editar doctor
-def editar_doctor(request, id_doctor):
-    doctor = Doctor.objects.get(pk=id_doctor)
+def editarDoctor(request, id_doctor):
+    doctor = get_object_or_404(Doctor, id_doctor=id_doctor)
+
     if request.method == 'POST':
-        doctor.nombre_doctor = request.POST["nombre_doctor"]
-        doctor.titulo = request.POST["titulo"]
-        doctor.id_especialidad = request.POST["especialidad"]
-        doctor.correo = request.POST["correo_doctor"]
-        doctor.foto = request.FILES["foto"] if 'foto' in request.FILES else doctor.foto
-        doctor.save()
-        messages.success(request, 'Doctor actualizado')
+        try:
+            id_doctor_form = request.POST["id_doctor"]
+            nombre_doctor = request.POST["nombre_doctor"]
+            titulo = request.POST["titulo"]
+            id_especialidad = request.POST["especialidad"]
+            correo = request.POST["correo_doctor"]
+            foto = request.FILES["foto"] if 'foto' in request.FILES else None
+
+            doctor.id_doctor = id_doctor_form
+            doctor.nombre_doctor = nombre_doctor
+            doctor.titulo = titulo
+            doctor.id_especialidad = id_especialidad
+            doctor.correo = correo
+
+            if foto:
+                doctor.foto = foto
+
+            doctor.save()
+            messages.success(request, 'Doctor Actualizado')
+
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
         return redirect('listarDoctor')
+
     else:
-        return render(request, "medicos_editar.html",{
-            'doctor' : doctor
-        })
+        return render(request, "doctores_actualizar.html", {'doctor': doctor})
 
-
-###ESPECIALIDAD
+#MODULOS FUNCIONES PARA ESPECIALIDA
+#*********************************************************************************************************
+#*********************************************************************************************************
+#///////////////////// ESPECIALIDAD, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#********************************************************************************************************
+#********************************************************************************************************
+    
 def listarespecialidad(request):
     especialidades = Especialidad.objects.all() 
     return render(request, "especialidades_listar.html",{
         'especialidades' : especialidades
     })
+    
+#MODULOS FUNCIONES PARA RECETA
+#*********************************************************************************************************
+#*********************************************************************************************************
+#///////////////////// RECETA, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#********************************************************************************************************
+#********************************************************************************************************
+
+from django.db import IntegrityError
+
+def crearReceta(request):
+    if request.method == 'POST':
+        form = RecetaForm(request.POST)
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('receta_listar')
+            except IntegrityError as e:
+                # Imprime el error específico para obtener más información.
+                print(e)
+                messages.error(request, 'Error al guardar la receta. Verifica las claves foráneas.')
+        # Si el formulario no es válido, también puedes imprimir los errores.
+        else:
+            print(form.errors)
+    else:
+        form = RecetaForm()
+    return render(request, 'receta_crear.html', {'form': form})
+
+def recetaListar(request):
+    recetas = Receta.objects.all()
+    return render(request, 'receta_listar.html', {'recetas': recetas})
+
+def exportar_pdf(request, id_receta):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="receta.pdf"'
+    p = canvas.Canvas(response)
+    receta = Receta.objects.get(id_receta=id_receta)
+    p.drawString(100, 800, f"Receta Médica - {receta.fecha}")
+    p.drawString(100, 780, f"Rut del Paciente: {receta.rutPaciente.rut_paciente}")
+    p.drawString(100, 760, f"Nombre del Paciente: {receta.rutPaciente.nombre_paciente}")
+    p.drawString(100, 740, f"Medicamentos: {receta.medicamentos.nombre_medicamento}")
+    p.drawString(100, 720, f"Instrucciones: {receta.instrucciones}")
+    p.showPage()
+    p.save()
+    
+    return response

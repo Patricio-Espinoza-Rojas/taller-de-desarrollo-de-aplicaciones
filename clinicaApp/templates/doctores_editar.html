@@ -1,0 +1,25 @@
+{% extends 'doctores_actualizar.html' %}
+
+{% block content %}
+
+    <h1 class="text-center">Editar doctor</h1>    
+
+    <form class="w-50 shadow mx-auto p-4 m-3" method="post" action="{% url 'editarDoctor' id_doctor=doctor.id_doctor %}">
+
+        {% csrf_token %}
+        <input type="hidden" name="id_doctor" value="{{ doctor.id_doctor }}">
+
+        ID Doctor: <input type="text" name="id doctor" class="form-control my-2" required value="{{doctor.id_doctor}}">
+
+        Nombre: <input type="text" name="nombre_doctor" class="form-control my-2" required value="{{doctor.nombre_doctor}}">
+
+        Título del Profesional: <input type="text" name="titulo" class="form-control my-2" required value="{{doctor.titulo}}">
+
+        Especialidad del profesional: <input type="text" name="especialidad" class="form-control my-2" required value="{{doctor.especialidad}}">
+
+        Correo: <input type="text" name="correo_doctor" class="form-control my-2" required value="{{doctor.correo_doctor}}">
+
+        <input type="submit"value="Actualizar" class="btn btn-primary">
+    </form>
+{% include 'footer.html' %}
+{% endblock%}

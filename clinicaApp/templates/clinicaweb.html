@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -15,6 +16,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
@@ -31,89 +33,129 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-        }
+            .hover-color:hover {
+              color: #f05f40 !important; /* Cambia este color al color que tiene "Reservar horas" */}}
+            
+            .navbar-brand-img {
+            height: 50px; /* Ajusta este valor según el tamaño del navbar */
+            width: auto; /* Esto mantendrá la proporción de la imagen */}
+            
+            .flex-column-nav {
+            flex-direction: column;}
+
+            .login-button {
+              align-self: flex-end}
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Clínica Kill Coronavirus</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'crearPaciente' %}"
-                >Crear Paciente</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'listarPaciente' %}"
-                >Listar Pacientes</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'crearDoctor' %}"
-                >Crear Médicos</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'listarDoctor' %}"
-                >Listar Médicos</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'listarespecialidad' %}"
-                >Listar Especialidades</a
-              >
-            </li>
-
-            {% comment %} inicio de sesion {% endcomment %}
-            <div>
-            <form
-              class="d-flex"
-              role="search"
-              action="{% url 'inicioSesion' %}"
-              method="get"
-            ></form>
-            {% if user.is_authenticated %}
-            <a
-              class="btn btn-outline-primary ms-2"
-              href="{% url 'logout' %}"
-              role="button"
-              >Cerrar sesión</a
+    
+    <header>
+      {% comment %} en agendar_cita se esta llamando al primer nav {% endcomment %}
+      {% include 'agendar_cita.html' %}
+          
+      {% comment %} segundo nav {% endcomment %}
+      <div id="botom-header">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'inicio' %} ">
+              <img src="{% static 'img/logo_clinica_nav.png' %}" class="navbar-brand-img rounded-circle" alt="Logo"></a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
             >
-            {% else %}
-            <a
-              class="btn btn-outline-primary ms-2"
-              href="{% url 'login' %}"
-              role="button"
-              >Iniciar sesión</a
-            >
-            {% endif %}
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav flex-column-nav">
+                {% comment %} inicio 
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
+                </li>
+                {% endcomment %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'nosotros' %}">Nosotros</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'crearPaciente' %}"
+                    >Crear Paciente</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'listarPaciente' %}"
+                    >Lista de Pacientes</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'crearDoctor' %}"
+                    >Crear Doctores</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'listarDoctor' %}"
+                    >Lista de Doctores</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'listarespecialidad' %}"
+                    >Lista de Especialidades</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'crearReceta' %}"
+                    >Ingresar Receta</a
+                  >
+                </li>
 
-          </ul>
-        </div>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'crearFichaPaciente' %}"
+                    >Crear ficha clínica paciente</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'listarFichaPaciente' %}"
+                    >Lista de ficha clínica paciente</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'recetaListar' %}"
+                    >Lista de Recetas</a>
+                </li>
+
+              </ul>
+              {% comment %} inicio de sesion {% endcomment %}
+                <div>
+                <form
+                  class="d-flex"
+                  role="search"
+                  action="{% url 'inicioSesion' %}"
+                  method="get"
+                ></form>
+                {% if user.is_authenticated %}
+                <a
+                  class="btn btn-outline-primary ms-2 login-button"
+                  href="{% url 'logout' %}"
+                  role="button"
+                  >Cerrar sesión</a
+                >
+                {% else %}
+                <a
+                  class="btn btn-outline-primary ms-2 login-button"
+                  href="{% url 'login' %}"
+                  role="button"
+                  >Iniciar sesión</a
+                >
+                {% endif %}
+            </div>
+          </div>
+        </nav>
       </div>
-    </nav>
+    </header>
     {% comment %}
     <script src="" async defer></script>
     {% endcomment %} 
-    {% comment %} footer {% endcomment %}
     {% block content %}
     {% endblock%}
   </body>
