@@ -180,14 +180,9 @@ def guardar(request):
     if not (nombre.replace(" ", "").isalpha()):
         messages.error(request, 'Nombre solo deben contener letras y espacios.')
         return redirect('listarPaciente')   
-<<<<<<< HEAD
-    
-    
-    
-=======
+
 
     tipousuario_fk = get_object_or_404(Tipousuario, id_tipousuario=1)
->>>>>>> df2943c721ed60499f525372bad3128e7275fe21
     pa = Paciente(rut_paciente=rut, nombre_paciente=nombre, direccion_paciente=direccion,telefono_paciente=telefono,
                     correo_paciente=correo, tipousuario=tipousuario_fk)
     pa.save()
@@ -420,7 +415,7 @@ def crearReceta(request):
         if form.is_valid():
             try:
                 form.save()
-                return redirect('receta_listar')
+                return redirect('recetaListar')
             except IntegrityError as e:
                 # Imprime el error específico para obtener más información.
                 print(e)

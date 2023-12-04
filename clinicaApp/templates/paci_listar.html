@@ -27,7 +27,7 @@
             <td>{{paciente.telefono_paciente}}</td>
             <td>{{paciente.correo_paciente}}</td>
             <td> 
-                 <form action="{% url 'eliminar' paciente.rut_paciente %}" method="post">
+                <form action="{% url 'eliminar' paciente.rut_paciente %}" method="post">
                     {% csrf_token %}
                     <button class="btn btn-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">
                         <i class="fa fa-trash"></i>
@@ -45,7 +45,7 @@
         </tr>
     {% empty %}
         <tr>
-          <td colspan="5" class="text-center">No hay pacientes registrados.</td>
+            <td colspan="5" class="text-center">No hay pacientes registrados.</td>
         </tr>   
     {% endfor %}
     </table>

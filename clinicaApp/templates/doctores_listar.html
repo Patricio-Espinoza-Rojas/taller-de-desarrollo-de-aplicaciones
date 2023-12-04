@@ -1,11 +1,11 @@
 {% extends 'clinicaweb.html' %}
 
 {% block content %}
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-success">{{message}}</div>
-    {% endfor %}
-{% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{message}}</div>
+        {% endfor %}
+    {% endif %}
 
     <h1 class="text-center mt-5">Lista de Doctores</h1>
 
@@ -18,13 +18,8 @@
             <th>Correo</th>
             <th></th>
             <th></th>
-<<<<<<< HEAD:clinicaApp/templates/medicos_listar.html
             <!--ARREGLAR ID ESPECIALIDAD-->
-    {% for medico in medicos %}
-=======
-        <!--ARREGLAR ID ESPECIALIDAD-->
     {% for doctor in doctores %}
->>>>>>> df2943c721ed60499f525372bad3128e7275fe21:clinicaApp/templates/doctores_listar.html
         <tr>
             <td>{{doctor.id_doctor}}</td>
             <td>{{doctor.nombre_doctor}}</td>
@@ -51,9 +46,9 @@
         </tr>
     {% empty %}
         <tr>
-          <td colspan="5" class="text-center">No hay doctores registrados.</td>
+            <td colspan="5" class="text-center">No hay doctores registrados.</td>
         </tr>   
     {% endfor %}
     </table>
-{% include 'footer.html' %}
-{% endblock %}
+    {% include 'footer.html' %}
+{%endblock%}
