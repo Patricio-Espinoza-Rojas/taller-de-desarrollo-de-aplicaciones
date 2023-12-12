@@ -438,7 +438,7 @@ def editarDoctor(request, id_doctor):
     else:
         return render(request, "doctores_actualizar.html", {'doctor': doctor})
 
-#MODULOS FUNCIONES PARA ESPECIALIDA
+#MODULOS FUNCIONES PARA ESPECIALIDAD
 #*********************************************************************************************************
 #*********************************************************************************************************
 #///////////////////// ESPECIALIDAD, CRUD - VALIDACIONES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

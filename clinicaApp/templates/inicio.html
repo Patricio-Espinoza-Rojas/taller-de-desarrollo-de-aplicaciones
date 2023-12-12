@@ -27,7 +27,7 @@
     <h2 class="text-center pb-2">Nuestro equipo</h2>
     <div class="row">
         {% for Doctor in equipo %}
-        <div class="col-md-4">
+        <div class="col-md-4 py-4">
             <div class="card">
                 {% if Doctor.foto %}
                 <img src="{{ Doctor.foto.url }}" class="card-img-top" alt="{{ Doctor.nombre_doctor }}">
