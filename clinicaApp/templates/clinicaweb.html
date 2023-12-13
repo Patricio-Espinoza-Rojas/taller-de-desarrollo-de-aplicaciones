@@ -82,21 +82,25 @@
                   <a class="nav-link" href="{% url 'nosotros' %}">Nosotros</a>
                 </li>
                 {% if user.is_authenticated %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'crearPaciente' %}"
-                    >Crear Paciente</a
-                  >
-                </li>
+
+                {% if user.access >=  2%}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'crearPaciente' %}"
+                      >Crear Paciente</a>
+                  </li>
+                {% endif %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'listarPaciente' %}"
                     >Lista de Pacientes</a
                   >
                 </li>
+                {% if user.access >=  2%}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'crearDoctor' %}"
                     >Crear Doctores</a
                   >
                 </li>
+                {% endif %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'listarDoctor' %}"
                     >Lista de Doctores</a
@@ -107,16 +111,18 @@
                     >Lista de Especialidades</a
                   >
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'crearReceta' %}"
-                    >Ingresar Receta</a
-                  >
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'crearFichaPaciente' %}"
-                    >Crear ficha clínica paciente</a>
-                </li>
+                {% if user.access >=  2%}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'crearReceta' %}"
+                      >Ingresar Receta</a
+                    >
+                  </li>
+                  
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'crearFichaPaciente' %}"
+                      >Crear ficha clínica paciente</a>
+                  </li>
+                {% endif %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'listarFichaPaciente' %}"
                     >Lista de ficha clínica paciente</a>
