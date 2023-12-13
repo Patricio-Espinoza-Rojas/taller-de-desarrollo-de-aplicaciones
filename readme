@@ -2,12 +2,19 @@
 #****************PASOS PARA USAR APPP Y JANGO MAS ACTUALIZACIONES*************
 
 '''
-1- EJECUTAR : .\env\Scripts\activate  esto activa el ambiente virtual
-2- python manage.py startapp clinicaApp 
-3- python manage.py runserver
-4- Django version 4.2.6, using settings 'mysite.settings'
-Starting development server at http://127.0.0.1:8000/
-Quit the server with CTRL-BREAK.  en la direccion ip hacer control + click para abrir la pagina en navegador 
+   EJECUTAR : 
+1- pip install Django==4.2.7
+2- pip install virtualenv
+3- virtualenv env
+4- .\env\Scripts\activate   #esto activa el ambiente virtual
+5- pip install Django==4.2.7
+6- pip install Django-xhtml2pdf
+7- pip install django-crispy-forms
+8- python manage.py runserver
+   Starting development server at http://127.0.0.1:8000/
+   Quit the server with CTRL-BREAK.  en la direccion ip hacer control + click para abrir la pagina en navegador
+
+
 
 #la aplicacion esta siendo editada en clinicaApp
 #la carpeta appclinicaArchivos estan todos los constructores
