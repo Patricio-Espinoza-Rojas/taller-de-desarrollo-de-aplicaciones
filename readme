@@ -38,7 +38,23 @@ https://getbootstrap.com/docs/5.3/components/navbar/
     https://docs.djangoproject.com/en/4.1/ref/models/fields/#model-field-types
     
     https://docs.djangoproject.com/en/4.1/ref/templates/builtins/
-    
+
+   *********** USUARIOS BASE DE DATOS *************
+   -usuario no registrado ni logeado = al acceder al sitio web solo tendra acceso a las vistas de inicio (eso conlleva todo lo que esté disponible dentro de la vista de inicio) , nosotros, iniciar sesión y reservar horas
+   -usuasrio con acceso 1 podrá ver solo las vistas de inicio, Nosotros, Lista de Doctores, Lista de especialidades, Lista de ficha clinica paciente, Lista de Recetas, Reservar horas y botón de cerrar sesión
+   -usuario con acceso 2 y 3 podrá ver todas las vistas disponibles.
+
+   ------------ USUARIOS ----------------
+   Usuario: admin
+   Pasword: 12345678.
+   nivel de acceso = 3
+   ---------------------------
+   Usuario: pato
+   Pasword: 12345678.
+   nivel de acceso = 1
+   
+   ****************************************************************
+
     ******creacion super usuario:********    http://127.0.0.1:8000/Actualizar%20Paciente
     usuario:admin
     Pasword:admin12345678
