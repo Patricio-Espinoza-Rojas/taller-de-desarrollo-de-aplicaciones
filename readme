@@ -54,9 +54,19 @@ https://getbootstrap.com/docs/5.3/components/navbar/
    nivel de acceso = 1
 
    ---------------------------
+   Usuario: recepcion_prueba
+   Pasword: Recepcion12345678.
+   nivel de acceso = 1
+
+   ---------------------------
    Usuario: paciente_prueba
    Pasword: Paciente12345678.
    nivel de acceso = 1
+
+   ---------------------------
+   Usuario: doctor_prueba
+   Pasword: Doctor12345678.
+   nivel de acceso = 3
    
    ****************************************************************
 
