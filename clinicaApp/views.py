@@ -152,7 +152,7 @@ def validar_rut(rut):
 
 #VALIDAR SOLO NUMEROS
 def validar_rutstring(rut):
-    if not re.match("^[0-9\-.]+$", rut):
+    if not re.match("^[0-9.]*[-]?[0-9kK]{1}$", rut):
         return False
     return True
 #VAlidar nombre aceptar Ñ  y tilde solo letras
@@ -171,9 +171,9 @@ def guardar(request):
     correo = request.POST["correo"]
     
     if validar_rutstring(rut):
-        messages.success(request,'Rut Validado sin letras')        
+        messages.success(request,'Rut Válido')        
     else:
-        messages.error(request,"No se admiten letras en Rut")
+        messages.error(request,"El rut ingresado es inválido")
         return redirect('listarPaciente')
     
     # Validar longitud máxima para el RUT
@@ -187,7 +187,7 @@ def guardar(request):
         return redirect('listarPaciente')
     
     if validar_nombreapellido(nombre):
-        messages.success(request, 'Nombre Validado')
+        messages.success(request, 'Nombre Válido')
     else:
         messages.error(request, "Nombre incorrecto")
         return redirect('listarPaciente') 
@@ -198,7 +198,7 @@ def guardar(request):
         return redirect('listarPaciente')  
     
     if validar_correo(correo):
-        messages.success(request, 'Correo validado')
+        messages.success(request, 'Correo válido')
     else:
         messages.error(request, 'Correo incorrecto')
         return redirect('listarPaciente')  
@@ -252,7 +252,7 @@ def editar(request):
             return redirect('listarPaciente')
         
         if validar_nombreapellido(nombre):
-            messages.success(request, 'Nombre Validado')
+            messages.success(request, 'Nombre Válido')
         else:
             messages.error(request, "Nombre incorrecto")
             return redirect('listarPaciente') 
@@ -263,7 +263,7 @@ def editar(request):
             return redirect('listarPaciente')  
         
         if validar_correo(correo):
-            messages.success(request, 'Correo validado')
+            messages.success(request, 'Correo válido')
         else:
             messages.error(request, 'Correo incorrecto')
             return redirect('listarPaciente')  
@@ -343,7 +343,7 @@ def guardarDoctor(request):
             return redirect('listarDoctor')
         
         if validar_correo(correo):
-            messages.success(request, 'Correo validado')
+            messages.success(request, 'Correo válido')
         else:
             messages.error(request, 'Correo incorrecto')
             return redirect('listarDoctor') 
@@ -413,7 +413,7 @@ def editarDoctor(request, id_doctor):
                 return redirect('listarDoctor') 
             
             if validar_correo(correo):
-                messages.success(request, 'Correo validado')
+                messages.success(request, 'Correo válido')
             else:
                 messages.error(request, 'Correo incorrecto')
                 return redirect('listarDoctor') 
